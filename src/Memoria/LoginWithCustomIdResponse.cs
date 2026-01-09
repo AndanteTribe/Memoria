@@ -7,6 +7,9 @@ namespace Memoria;
 /// </summary>
 public record LoginWithCustomIdResponse
 {
+    /// <summary>
+    /// レスポンスデータ.
+    /// </summary>
     [JsonPropertyName("data")]
     public LoginResult Result { get; init; }
 }

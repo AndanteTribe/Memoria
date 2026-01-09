@@ -124,8 +124,15 @@ public class PlayFabClient : IAccountManagement, IPlayerDataManagement, IAuthent
                 // 成功時の処理
                 if (response.IsSuccessStatusCode)
                 {
-                    var responseBytes = await response.Content.ReadAsByteArrayAsync();
+#if NET8_0_OR_GREATER
+                    var responseBytes = await response.Content.ReadAsByteArrayAsync(cancellationToken);
                     return JsonSerializer.Deserialize<TResponse>(responseBytes)!;
+#else
+                    cancellationToken.ThrowIfCancellationRequested();
+                    var responseString = await response.Content.ReadAsStringAsync();
+                    cancellationToken.ThrowIfCancellationRequested();
+                    return JsonSerializer.Deserialize<TResponse>(responseString)!;
+#endif
                 }
 
                 // リトライ可能なエラーの場合、リトライ
@@ -134,10 +141,17 @@ public class PlayFabClient : IAccountManagement, IPlayerDataManagement, IAuthent
                     await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, attempt)), cancellationToken);
                     continue;
                 }
-
-                var errorDetail = await response.Content.ReadAsStringAsync();
+#if NET8_0_OR_GREATER
+                var errorDetail = await response.Content.ReadAsStringAsync(cancellationToken);
                 throw new HttpRequestException(
                     $"PlayFab API Error ({response.StatusCode}): {errorDetail}");
+#else
+                cancellationToken.ThrowIfCancellationRequested();
+                var errorDetail = await response.Content.ReadAsStringAsync();
+                cancellationToken.ThrowIfCancellationRequested();
+                throw new HttpRequestException(
+                    $"PlayFab API Error ({response.StatusCode}): {errorDetail}");
+#endif
             }
             catch (TaskCanceledException) when (!cancellationToken.IsCancellationRequested &&
                                                 attempt < MaxRetries)

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
+        <TargetFrameworks>netstandard2.1;net8.0</TargetFrameworks>
         <LangVersion>13</LangVersion>
         <Nullable>enable</Nullable>
         <ImplicitUsings>true</ImplicitUsings>
@@ -22,7 +22,7 @@
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
     </PropertyGroup>
 
-    <ItemGroup>
+    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
       <PackageReference Include="System.Text.Json" Version="10.0.1" />
     </ItemGroup>
 
