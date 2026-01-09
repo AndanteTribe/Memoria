@@ -196,7 +196,8 @@ public class PlayFabClient : IAuthentication, IAccountManagement, IPlayerDataMan
             catch (TaskCanceledException) when (!cancellationToken.IsCancellationRequested &&
                                                 attempt < MaxRetries)
             {
-                await Task.Delay(TimeSpan.FromSeconds(HttpClient.Timeout.Seconds), cancellationToken);
+                // タイムアウトの場合、リトライ
+                await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, attempt)), cancellationToken);
             }
         }
         throw new TimeoutException("PlayFab request failed after maximum retry attempts.");
