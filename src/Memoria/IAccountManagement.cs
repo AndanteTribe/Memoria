@@ -6,7 +6,7 @@ namespace Memoria;
 public interface IAccountManagement
 {
     /// <summary>
-    ///　プレイヤーの表示名を更新します.
+    /// プレイヤーの表示名を更新します.
     /// </summary>
     /// <param name="request"></param>
     /// <param name="titleId"></param>
