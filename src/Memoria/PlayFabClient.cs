@@ -164,7 +164,6 @@ public class PlayFabClient : IAuthentication, IAccountManagement, IPlayerDataMan
                 }
 
                 message.Content = content;
-
                 using var response = await _httpClient.SendAsync(message, cancellationToken);
 
                 // 成功時の処理
@@ -189,14 +188,12 @@ public class PlayFabClient : IAuthentication, IAccountManagement, IPlayerDataMan
                 }
 #if NET8_0_OR_GREATER
                 var errorDetail = await response.Content.ReadAsStringAsync(cancellationToken);
-                throw new HttpRequestException(
-                    $"PlayFab API Error ({response.StatusCode}): {errorDetail}");
+                response.EnsureSuccessStatusCode();
 #else
                 cancellationToken.ThrowIfCancellationRequested();
                 var errorDetail = await response.Content.ReadAsStringAsync();
                 cancellationToken.ThrowIfCancellationRequested();
-                throw new HttpRequestException(
-                    $"PlayFab API Error ({response.StatusCode}): {errorDetail}");
+                response.EnsureSuccessStatusCode();
 #endif
             }
             catch (TaskCanceledException) when (!cancellationToken.IsCancellationRequested &&
