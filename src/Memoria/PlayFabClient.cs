@@ -200,7 +200,7 @@ public class PlayFabClient : IAuthentication, IAccountManagement, IPlayerDataMan
 #endif
             }
             catch (TaskCanceledException) when (!cancellationToken.IsCancellationRequested &&
-                                                attempt < MaxRetries)
+                                                attempt < MaxRetries - 1)
             {
                 // タイムアウトの場合、リトライ
                 await Task.Delay(RetryDelay, cancellationToken);
