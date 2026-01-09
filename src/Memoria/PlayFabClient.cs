@@ -27,7 +27,12 @@ public class PlayFabClient : IAuthentication, IAccountManagement, IPlayerDataMan
     /// <summary>
     /// 最大リトライ回数
     /// </summary>
-    public int MaxRetries { get; set; } = 3;
+    public uint MaxRetries { get; set; } = 3;
+
+    /// <summary>
+    /// リトライ間隔
+    /// </summary>
+    public TimeSpan RetryDelay { get; set; } = TimeSpan.FromSeconds(1);
 
     /// <summary>
     /// 内部で使用するHttpClient
@@ -35,6 +40,7 @@ public class PlayFabClient : IAuthentication, IAccountManagement, IPlayerDataMan
     public HttpClient HttpClient => _httpClient;
 
     private readonly HttpClient _httpClient;
+    private readonly MediaTypeHeaderValue _mediaTypeHeaderValue = new("application/json");
 
     /// <summary>
     /// デフォルトコンストラクタ
@@ -140,17 +146,17 @@ public class PlayFabClient : IAuthentication, IAccountManagement, IPlayerDataMan
         string? authHeader,
         CancellationToken cancellationToken)
     {
-        var url = $"https://{titleId}.playfabapi.com{endpointPath}";
+        var url = "https://" + titleId + ".playfabapi.com" + endpointPath;
         var jsonBytes = JsonSerializer.SerializeToUtf8Bytes(requestBody);
 
-        for(int attempt = 0; attempt < MaxRetries; attempt++)
+        for(var attempt = 0; attempt < MaxRetries; attempt++)
         {
             try
             {
                 using var message = new HttpRequestMessage(HttpMethod.Post, url);
                 using var content = new ByteArrayContent(jsonBytes);
 
-                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                content.Headers.ContentType = _mediaTypeHeaderValue;
 
                 if (!string.IsNullOrEmpty(authHeader))
                 {
@@ -178,7 +184,7 @@ public class PlayFabClient : IAuthentication, IAccountManagement, IPlayerDataMan
                 // リトライ可能なエラーの場合、リトライ
                 if (ShouldRetry(response.StatusCode) && attempt < MaxRetries)
                 {
-                    await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, attempt)), cancellationToken);
+                    await Task.Delay(RetryDelay, cancellationToken);
                     continue;
                 }
 #if NET8_0_OR_GREATER
@@ -197,7 +203,7 @@ public class PlayFabClient : IAuthentication, IAccountManagement, IPlayerDataMan
                                                 attempt < MaxRetries)
             {
                 // タイムアウトの場合、リトライ
-                await Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, attempt)), cancellationToken);
+                await Task.Delay(RetryDelay, cancellationToken);
             }
         }
         throw new TimeoutException("PlayFab request failed after maximum retry attempts.");
