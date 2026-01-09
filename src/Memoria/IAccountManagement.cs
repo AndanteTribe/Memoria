@@ -9,7 +9,18 @@ public interface IAccountManagement
     ///　プレイヤーの表示名を更新します.
     /// </summary>
     /// <param name="request"></param>
+    /// <param name="titleId"></param>
+    /// <param name="xAuthorization"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    ValueTask<UpdateUserTitleDisplayNameResponse> UpdateUserTitleDisplayNameAsync(UpdateUserTitleDisplayNameRequest request, CancellationToken cancellationToken = default);
+    ValueTask<UpdateUserTitleDisplayNameResponse> UpdateUserTitleDisplayNameAsync(UpdateUserTitleDisplayNameRequest request, string titleId, string xAuthorization, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// プレイヤーの表示名を更新します（ユーザーオプション付き）.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="userOption"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    ValueTask<UpdateUserTitleDisplayNameResponse> UpdateUserTitleDisplayNameAsync(UpdateUserTitleDisplayNameRequest request, UserOption userOption, CancellationToken cancellationToken = default);
 }

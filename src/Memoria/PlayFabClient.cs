@@ -7,8 +7,13 @@ namespace Memoria;
 /// <summary>
 ///　PlayFabAPIクライアント
 /// </summary>
-public class PlayFabClient : IAccountManagement, IPlayerDataManagement, IAuthentication, IDisposable
+public class PlayFabClient : IAuthentication, IAccountManagement, IPlayerDataManagement, IDisposable
 {
+    /// <summary>
+    /// 認証API
+    /// </summary>
+    public IAuthentication Authentication => this;
+
     /// <summary>
     /// アカウント管理API
     /// </summary>
@@ -18,11 +23,6 @@ public class PlayFabClient : IAccountManagement, IPlayerDataManagement, IAuthent
     /// プレイヤーデータ管理API
     /// </summary>
     public IPlayerDataManagement PlayerDataManagement => this;
-
-    /// <summary>
-    /// 認証API
-    /// </summary>
-    public IAuthentication Authentication => this;
 
     /// <summary>
     /// 最大リトライ回数
@@ -65,27 +65,67 @@ public class PlayFabClient : IAccountManagement, IPlayerDataManagement, IAuthent
         return response;
     }
 
+    async ValueTask<UserOption> IAuthentication.LoginAndGetUserOptionAsync(LoginWithCustomIdRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await Authentication.LoginWithCustomIdAsync(request, cancellationToken);
+        var userOption = new UserOption(response.Result, request.TitleId);
+        return userOption;
+    }
+
     async ValueTask<UpdateUserTitleDisplayNameResponse> IAccountManagement.UpdateUserTitleDisplayNameAsync(
         UpdateUserTitleDisplayNameRequest request,
+        string titleId,
+        string xAuthorization,
         CancellationToken cancellationToken)
     {
         var response = await SendPlayFabRequestAsync<UpdateUserTitleDisplayNameRequest, UpdateUserTitleDisplayNameResponse>(
-            request.TitleId,
+            titleId,
             "/Client/UpdateUserTitleDisplayName",
             request,
-            request.XAuthorization,
+            xAuthorization,
+            cancellationToken);
+        return response;
+    }
+
+    async ValueTask<UpdateUserTitleDisplayNameResponse> IAccountManagement.UpdateUserTitleDisplayNameAsync(
+        UpdateUserTitleDisplayNameRequest request,
+        UserOption userOption,
+        CancellationToken cancellationToken)
+    {
+        var response = await SendPlayFabRequestAsync<UpdateUserTitleDisplayNameRequest, UpdateUserTitleDisplayNameResponse>(
+            userOption.TitleId,
+            "/Client/UpdateUserTitleDisplayName",
+            request,
+            userOption.LoginResult.SessionTicket,
+            cancellationToken);
+        return response;
+    }
+
+    async ValueTask<UpdatePlayerStatisticsResponse> IPlayerDataManagement.UpdatePlayerStatisticsAsync(
+        UpdatePlayerStatisticsRequest request,
+        string titleId,
+        string xAuthorization,
+        CancellationToken cancellationToken)
+    {
+        var response = await SendPlayFabRequestAsync<UpdatePlayerStatisticsRequest, UpdatePlayerStatisticsResponse>(
+            titleId,
+            "/Client/UpdatePlayerStatistics",
+            request,
+            xAuthorization,
             cancellationToken);
         return response;
     }
 
     async ValueTask<UpdatePlayerStatisticsResponse> IPlayerDataManagement.UpdatePlayerStatisticsAsync(UpdatePlayerStatisticsRequest request,
+        UserOption userOption,
         CancellationToken cancellationToken)
     {
         var response = await SendPlayFabRequestAsync<UpdatePlayerStatisticsRequest, UpdatePlayerStatisticsResponse>(
-            request.TitleId,
+            userOption.TitleId,
             "/Client/UpdatePlayerStatistics",
             request,
-            request.XAuthorization,
+            userOption.LoginResult.SessionTicket,
             cancellationToken);
         return response;
     }
@@ -103,7 +143,7 @@ public class PlayFabClient : IAccountManagement, IPlayerDataManagement, IAuthent
         var url = $"https://{titleId}.playfabapi.com{endpointPath}";
         var jsonBytes = JsonSerializer.SerializeToUtf8Bytes(requestBody);
 
-        for(int attempt = 0; attempt <= MaxRetries; attempt++)
+        for(int attempt = 0; attempt < MaxRetries; attempt++)
         {
             try
             {

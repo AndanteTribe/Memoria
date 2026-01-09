@@ -27,5 +27,5 @@ public record LoginResult
     /// <summary>
     /// セッショントークン.
     /// </summary>
-    public string SessionTicket { get; init; }
+    public string SessionTicket { get; init; }　= string.Empty;
 }
