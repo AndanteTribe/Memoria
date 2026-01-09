@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/Memoria.Tests/Memoria.Tests.csproj" />
+  <Project Path="src/Memoria/Memoria.csproj" />
+</Solution>
