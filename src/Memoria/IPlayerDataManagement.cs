@@ -1,7 +1,7 @@
 namespace Memoria;
 
 /// <summary>
-/// プレイヤーのデータ管理に関するインターフェース
+/// プレイヤーのデータ管理に関するインターフェース.
 /// </summary>
 public interface IPlayerDataManagement
 {
@@ -16,7 +16,7 @@ public interface IPlayerDataManagement
     ValueTask<UpdatePlayerStatisticsResponse> UpdatePlayerStatisticsAsync(UpdatePlayerStatisticsRequest request, string titleId, string xAuthorization, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// プレイヤーの統計情報を更新する（ユーザーオプション付き）.
+    /// プレイヤーの統計情報を更新する(ユーザーオプション付き).
     /// </summary>
     /// <param name="request"></param>
     /// <param name="userOption"></param>

@@ -66,7 +66,7 @@ public class PlayFabClient : IAuthentication, IAccountManagement, IPlayerDataMan
             request.TitleId,
             "/Client/LoginWithCustomID",
             request,
-            null,
+            string.Empty,
             cancellationToken);
         return response;
     }
@@ -143,7 +143,7 @@ public class PlayFabClient : IAuthentication, IAccountManagement, IPlayerDataMan
         string titleId,
         string endpointPath,
         TRequest requestBody,
-        string? authHeader,
+        string authHeader,
         CancellationToken cancellationToken)
     {
         var url = "https://" + titleId + ".playfabapi.com" + endpointPath;

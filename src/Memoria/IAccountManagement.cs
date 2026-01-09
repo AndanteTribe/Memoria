@@ -16,7 +16,7 @@ public interface IAccountManagement
     ValueTask<UpdateUserTitleDisplayNameResponse> UpdateUserTitleDisplayNameAsync(UpdateUserTitleDisplayNameRequest request, string titleId, string xAuthorization, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// プレイヤーの表示名を更新します（ユーザーオプション付き）.
+    /// プレイヤーの表示名を更新します(ユーザーオプション付き).
     /// </summary>
     /// <param name="request"></param>
     /// <param name="userOption"></param>
