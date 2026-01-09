@@ -5,7 +5,7 @@ using System.Text.Json;
 namespace Memoria;
 
 /// <summary>
-///　PlayFabAPIクライアント
+/// PlayFabAPIクライアント
 /// </summary>
 public class PlayFabClient : IAuthentication, IAccountManagement, IPlayerDataManagement, IDisposable
 {
