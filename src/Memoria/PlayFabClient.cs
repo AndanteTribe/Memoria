@@ -54,7 +54,7 @@ public class PlayFabClient : IAuthentication, IAccountManagement, IPlayerDataMan
     /// </summary>
     /// <param name="handler"></param>
     /// <param name="disposeHandler"></param>
-    public PlayFabClient(HttpClientHandler handler, bool disposeHandler = true)
+    public PlayFabClient(HttpMessageHandler handler, bool disposeHandler = true)
     {
         _httpClient = new HttpClient(handler, disposeHandler);
     }

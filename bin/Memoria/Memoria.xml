@@ -1,0 +1,362 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Memoria</name>
+    </assembly>
+    <members>
+        <member name="M:Memoria.GuidConverter.Read(System.Text.Json.Utf8JsonReader@,System.Type,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:Memoria.GuidConverter.Write(System.Text.Json.Utf8JsonWriter,System.Guid,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="T:Memoria.IAccountManagement">
+            <summary>
+            アカウント管理機能を提供します.
+            </summary>
+        </member>
+        <member name="M:Memoria.IAccountManagement.UpdateUserTitleDisplayNameAsync(Memoria.UpdateUserTitleDisplayNameRequest,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            プレイヤーの表示名を更新します.
+            </summary>
+            <param name="request"></param>
+            <param name="titleId"></param>
+            <param name="xAuthorization"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Memoria.IAccountManagement.UpdateUserTitleDisplayNameAsync(Memoria.UpdateUserTitleDisplayNameRequest,Memoria.UserOption,System.Threading.CancellationToken)">
+            <summary>
+            プレイヤーの表示名を更新します(ユーザーオプション付き).
+            </summary>
+            <param name="request"></param>
+            <param name="userOption"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Memoria.IAuthentication">
+            <summary>
+            認証関連の操作を提供する.
+            </summary>
+        </member>
+        <member name="M:Memoria.IAuthentication.LoginWithCustomIdAsync(Memoria.LoginWithCustomIdRequest,System.Threading.CancellationToken)">
+            <summary>
+            カスタムIDを使用してログインする.
+            </summary>
+            <param name="request"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Memoria.IAuthentication.LoginAndGetUserOptionAsync(Memoria.LoginWithCustomIdRequest,System.Threading.CancellationToken)">
+            <summary>
+            カスタムIDを使用してログインし、ユーザーオプションを取得する.
+            </summary>
+            <param name="request"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Memoria.IPlayerDataManagement">
+            <summary>
+            プレイヤーのデータ管理に関するインターフェース.
+            </summary>
+        </member>
+        <member name="M:Memoria.IPlayerDataManagement.UpdatePlayerStatisticsAsync(Memoria.UpdatePlayerStatisticsRequest,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            プレイヤーの統計情報を更新する.
+            </summary>
+            <param name="request"></param>
+            <param name="titleId"></param>
+            <param name="xAuthorization"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Memoria.IPlayerDataManagement.UpdatePlayerStatisticsAsync(Memoria.UpdatePlayerStatisticsRequest,Memoria.UserOption,System.Threading.CancellationToken)">
+            <summary>
+            プレイヤーの統計情報を更新する(ユーザーオプション付き).
+            </summary>
+            <param name="request"></param>
+            <param name="userOption"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Memoria.LoginWithCustomIdRequest">
+            <summary>
+            カスタムIDでログインするリクエスト.
+            </summary>
+        </member>
+        <member name="M:Memoria.LoginWithCustomIdRequest.#ctor(System.String)">
+            <summary>
+            カスタムIDでログインするリクエスト.
+            </summary>
+        </member>
+        <member name="P:Memoria.LoginWithCustomIdRequest.TitleId">
+            <summary>
+            タイトルID.
+            </summary>
+        </member>
+        <member name="P:Memoria.LoginWithCustomIdRequest.CustomId">
+            <summary>
+            カスタムID.
+            </summary>
+        </member>
+        <member name="P:Memoria.LoginWithCustomIdRequest.CreateAccount">
+            <summary>
+            アカウントを作成するかどうか.
+            </summary>
+        </member>
+        <member name="T:Memoria.LoginWithCustomIdResponse">
+            <summary>
+            カスタムIDでログインするレスポンス.
+            </summary>
+        </member>
+        <member name="P:Memoria.LoginWithCustomIdResponse.Result">
+            <summary>
+            レスポンスデータ.
+            </summary>
+        </member>
+        <member name="T:Memoria.LoginResult">
+            <summary>
+            ログイン結果.
+            </summary>
+        </member>
+        <member name="P:Memoria.LoginResult.NewlyCreated">
+            <summary>
+            新規作成されたかどうか.
+            </summary>
+        </member>
+        <member name="P:Memoria.LoginResult.SessionTicket">
+            <summary>
+            セッショントークン.
+            </summary>
+        </member>
+        <member name="T:Memoria.PlayFabClient">
+            <summary>
+            PlayFabAPIクライアント
+            </summary>
+        </member>
+        <member name="P:Memoria.PlayFabClient.Authentication">
+            <summary>
+            認証API
+            </summary>
+        </member>
+        <member name="P:Memoria.PlayFabClient.AccountManagement">
+            <summary>
+            アカウント管理API
+            </summary>
+        </member>
+        <member name="P:Memoria.PlayFabClient.PlayerDataManagement">
+            <summary>
+            プレイヤーデータ管理API
+            </summary>
+        </member>
+        <member name="P:Memoria.PlayFabClient.MaxRetries">
+            <summary>
+            最大リトライ回数
+            </summary>
+        </member>
+        <member name="P:Memoria.PlayFabClient.RetryDelay">
+            <summary>
+            リトライ間隔
+            </summary>
+        </member>
+        <member name="P:Memoria.PlayFabClient.HttpClient">
+            <summary>
+            内部で使用するHttpClient
+            </summary>
+        </member>
+        <member name="M:Memoria.PlayFabClient.#ctor">
+            <summary>
+            デフォルトコンストラクタ
+            </summary>
+        </member>
+        <member name="M:Memoria.PlayFabClient.#ctor(System.Net.Http.HttpMessageHandler,System.Boolean)">
+            <summary>
+            カスタムハンドラを使用するコンストラクタ
+            </summary>
+            <param name="handler"></param>
+            <param name="disposeHandler"></param>
+        </member>
+        <member name="M:Memoria.PlayFabClient.SendPlayFabRequestAsync``2(System.String,System.String,``0,System.String,System.Threading.CancellationToken)">
+            <summary>
+            PlayFabへのHTTPリクエストを処理する汎用メソッド
+            </summary>
+        </member>
+        <member name="M:Memoria.PlayFabClient.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="T:Memoria.PlayFabClientJsonSerializerContext">
+            <summary>
+            PlayFab Client JSON シリアライザーコンテキスト.
+            </summary>
+        </member>
+        <member name="P:Memoria.PlayFabClientJsonSerializerContext.Boolean">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Memoria.PlayFabClientJsonSerializerContext.LoginResult">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Memoria.PlayFabClientJsonSerializerContext.LoginWithCustomIdRequest">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Memoria.PlayFabClientJsonSerializerContext.LoginWithCustomIdResponse">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Memoria.PlayFabClientJsonSerializerContext.StatisticUpdate">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Memoria.PlayFabClientJsonSerializerContext.StatisticUpdateArray">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Memoria.PlayFabClientJsonSerializerContext.UpdatePlayerStatisticsRequest">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Memoria.PlayFabClientJsonSerializerContext.UpdateUserTitleDisplayNameResponse">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Memoria.PlayFabClientJsonSerializerContext.UpdateUserTitleDisplayNameResult">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Memoria.PlayFabClientJsonSerializerContext.Guid">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Memoria.PlayFabClientJsonSerializerContext.Int32">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Memoria.PlayFabClientJsonSerializerContext.String">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:Memoria.PlayFabClientJsonSerializerContext.Default">
+            <summary>
+            The default <see cref="T:System.Text.Json.Serialization.JsonSerializerContext"/> associated with a default <see cref="T:System.Text.Json.JsonSerializerOptions"/> instance.
+            </summary>
+        </member>
+        <member name="P:Memoria.PlayFabClientJsonSerializerContext.GeneratedSerializerOptions">
+            <summary>
+            The source-generated options associated with this context.
+            </summary>
+        </member>
+        <member name="M:Memoria.PlayFabClientJsonSerializerContext.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:Memoria.PlayFabClientJsonSerializerContext.#ctor(System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Memoria.PlayFabClientJsonSerializerContext.GetTypeInfo(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Memoria.UpdatePlayerStatisticsRequest">
+            <summary>
+            プレイヤーの統計情報を更新するリクエスト.
+            </summary>
+        </member>
+        <member name="M:Memoria.UpdatePlayerStatisticsRequest.#ctor(Memoria.StatisticUpdate[])">
+            <summary>
+            プレイヤーの統計情報を更新するリクエスト.
+            </summary>
+        </member>
+        <member name="P:Memoria.UpdatePlayerStatisticsRequest.Statistics">
+            <summary>
+            統計情報の配列.
+            </summary>
+        </member>
+        <member name="T:Memoria.StatisticUpdate">
+            <summary>
+            統計情報の更新内容.
+            </summary>
+        </member>
+        <member name="P:Memoria.StatisticUpdate.StatisticName">
+            <summary>
+            統計情報の名前.
+            </summary>
+        </member>
+        <member name="P:Memoria.StatisticUpdate.Value">
+            <summary>
+            統計情報の値.
+            </summary>
+        </member>
+        <member name="T:Memoria.UpdatePlayerStatisticsResponse">
+            <summary>
+            プレイヤーの統計情報を更新するレスポンス.
+            </summary>
+        </member>
+        <member name="T:Memoria.UpdateUserTitleDisplayNameRequest">
+            <summary>
+            ユーザーのタイトル表示名を更新するリクエスト.
+            </summary>
+            <param name="DisplayName">表示名</param>
+        </member>
+        <member name="M:Memoria.UpdateUserTitleDisplayNameRequest.#ctor(System.String)">
+            <summary>
+            ユーザーのタイトル表示名を更新するリクエスト.
+            </summary>
+            <param name="DisplayName">表示名</param>
+        </member>
+        <member name="P:Memoria.UpdateUserTitleDisplayNameRequest.DisplayName">
+            <summary>表示名</summary>
+        </member>
+        <member name="T:Memoria.UpdateUserTitleDisplayNameResponse">
+            <summary>
+            ユーザーのタイトル表示名を更新するレスポンス.
+            </summary>
+        </member>
+        <member name="P:Memoria.UpdateUserTitleDisplayNameResponse.Result">
+            <summary>
+            レスポンスデータ.
+            </summary>
+        </member>
+        <member name="T:Memoria.UpdateUserTitleDisplayNameResult">
+            <summary>
+            ユーザーのタイトル表示名更新結果.
+            </summary>
+        </member>
+        <member name="P:Memoria.UpdateUserTitleDisplayNameResult.DisplayName">
+            <summary>
+            表示名.
+            </summary>
+        </member>
+        <member name="T:Memoria.UserOption">
+            <summary>
+            ユーザーオプション情報.
+            </summary>
+            <param name="LoginResult"></param>
+            <param name="TitleId"></param>
+        </member>
+        <member name="M:Memoria.UserOption.#ctor(Memoria.LoginResult,System.String)">
+            <summary>
+            ユーザーオプション情報.
+            </summary>
+            <param name="LoginResult"></param>
+            <param name="TitleId"></param>
+        </member>
+        <member name="P:Memoria.UserOption.LoginResult">
+            <summary></summary>
+        </member>
+        <member name="P:Memoria.UserOption.TitleId">
+            <summary></summary>
+        </member>
+    </members>
+</doc>
