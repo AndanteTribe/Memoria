@@ -41,11 +41,14 @@ public class MemoriaTest
         const string sessionTicket = "FAKE_SESSION_TICKET";
 
         var handler = new MoqPlayFabHandler();
-        var fakeResponse = new UserOption(
-            new LoginResult {
+        var fakeResponse = new LoginWithCustomIdResponse()
+        {
+            Result = new LoginResult
+            {
                 SessionTicket = sessionTicket,
-                NewlyCreated = true
-            }, TitleId: titleId);
+                NewlyCreated = true,
+            },
+        };
 
         handler.ResponseData = fakeResponse;
         var client = new PlayFabClient(handler);
@@ -55,7 +58,6 @@ public class MemoriaTest
             CreateAccount = true,
         };
         var response = await client.Authentication.LoginAndGetUserOptionAsync(request);
-
         Assert.That(response.LoginResult.SessionTicket, Is.EqualTo(sessionTicket));
         Assert.That(response.LoginResult.NewlyCreated, Is.True);
         Assert.That(response.TitleId, Is.EqualTo(titleId));
