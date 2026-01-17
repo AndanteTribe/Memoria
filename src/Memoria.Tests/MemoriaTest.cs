@@ -26,7 +26,7 @@ public class MemoriaTest
         };
 
         var response = await client.Authentication.LoginWithCustomIdAsync(request);
-        
+
         Assert.That(response.Result.SessionTicket, Is.EqualTo(sessionTicket));
         Assert.That(response.Result.NewlyCreated, Is.True);
         Assert.That(handler.LastRequest, Is.Not.Null);
