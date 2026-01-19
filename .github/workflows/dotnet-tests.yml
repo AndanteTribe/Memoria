@@ -1,0 +1,37 @@
+name: dotnet-tests
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+  push:
+    branches:
+    - main
+  workflow_dispatch: {}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+    - run: dotnet restore ./src/Memoria.Tests
+    - run: dotnet build ./src/Memoria.Tests --configuration Release --no-restore
+    - run: dotnet test ./src/Memoria.Tests --configuration Release --no-build --verbosity normal --collect:"XPlat Code Coverage"
+    - name: Find coverage output path
+      run: |
+        cp $(find . -name "coverage.cobertura.xml") .
+    - name: Run ReportGenerator 
+      run: |
+        dotnet tool install -g dotnet-reportgenerator-globaltool
+        reportgenerator -reports:"coverage.cobertura.xml" -targetdir:"report" -reporttypes:"Html;MarkdownSummary"
+        echo "$(cat report/Summary.md)" >> $GITHUB_STEP_SUMMARY
+    - uses: actions/upload-artifact@v4
+      with:
+        name: coverage-report
+        path: report/ 
