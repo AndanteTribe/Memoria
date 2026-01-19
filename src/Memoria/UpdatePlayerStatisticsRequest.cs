@@ -26,5 +26,5 @@ public record StatisticUpdate
     /// <summary>
     /// 統計情報の値.
     /// </summary>
-    public int Value { get; init; }
+    public string Value { get; init; } = string.Empty;
 }
