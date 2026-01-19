@@ -2,24 +2,24 @@
 
 public class MemoriaTest
 {
+    private const string TitleId = "HogeTitleId";
+    private const string SessionTicket = "FAKE_SESSION_TICKET";
+
     [Test]
     public async Task LoginWithCustomIdTest()
     {
-        const string titleId = "HogeTitleId";
-        const string sessionTicket = "FAKE_SESSION_TICKET";
-
         var handler = new MoqPlayFabHandler();
         var fakeResponse = new LoginWithCustomIdResponse
         {
             Result = new LoginResult
             {
-                SessionTicket = sessionTicket,
+                SessionTicket = SessionTicket,
                 NewlyCreated = true,
             },
         };
         handler.ResponseData = fakeResponse;
         var client = new PlayFabClient(handler);
-        var request = new LoginWithCustomIdRequest(titleId)
+        var request = new LoginWithCustomIdRequest(TitleId)
         {
             CustomId = Guid.NewGuid(),
             CreateAccount = true,
@@ -27,40 +27,37 @@ public class MemoriaTest
 
         var response = await client.Authentication.LoginWithCustomIdAsync(request);
 
-        Assert.That(response.Result.SessionTicket, Is.EqualTo(sessionTicket));
+        Assert.That(response.Result.SessionTicket, Is.EqualTo(SessionTicket));
         Assert.That(response.Result.NewlyCreated, Is.True);
         Assert.That(handler.LastRequest, Is.Not.Null);
         Assert.That(handler.LastRequest.RequestUri!.ToString(), Contains.Substring("/Client/LoginWithCustomID"));
-        Assert.That(handler.LastRequestBody, Contains.Substring(titleId));
+        Assert.That(handler.LastRequestBody, Contains.Substring(TitleId));
     }
 
     [Test]
     public async Task LoginAndGetUserOptionTest()
     {
-        const string titleId = "HogeTitleId";
-        const string sessionTicket = "FAKE_SESSION_TICKET";
-
         var handler = new MoqPlayFabHandler();
         var fakeResponse = new LoginWithCustomIdResponse()
         {
             Result = new LoginResult
             {
-                SessionTicket = sessionTicket,
+                SessionTicket = SessionTicket,
                 NewlyCreated = true,
             },
         };
 
         handler.ResponseData = fakeResponse;
         var client = new PlayFabClient(handler);
-        var request = new LoginWithCustomIdRequest(titleId)
+        var request = new LoginWithCustomIdRequest(TitleId)
         {
             CustomId = Guid.NewGuid(),
             CreateAccount = true,
         };
         var response = await client.Authentication.LoginAndGetUserOptionAsync(request);
-        Assert.That(response.LoginResult.SessionTicket, Is.EqualTo(sessionTicket));
+        Assert.That(response.LoginResult.SessionTicket, Is.EqualTo(SessionTicket));
         Assert.That(response.LoginResult.NewlyCreated, Is.True);
-        Assert.That(response.TitleId, Is.EqualTo(titleId));
+        Assert.That(response.TitleId, Is.EqualTo(TitleId));
         Assert.That(handler.LastRequest, Is.Not.Null);
         Assert.That(handler.LastRequest.RequestUri!.ToString(), Contains.Substring("/Client/LoginWithCustomID"));
     }
@@ -68,9 +65,6 @@ public class MemoriaTest
     [Test]
     public async Task UpdatePlayerStatisticsTest()
     {
-        const string titleId = "HogeTitleId";
-        const string sessionTicket = "FAKE_SESSION_TICKET";
-
         var handler = new MoqPlayFabHandler();
         var fakeResponse = new UpdatePlayerStatisticsResponse();
         handler.ResponseData = fakeResponse;
@@ -80,11 +74,11 @@ public class MemoriaTest
             new StatisticUpdate
             {
                 StatisticName = "HighScore",
-                Value = 1000,
+                Value = "1000",
             },
         };
         var request = new UpdatePlayerStatisticsRequest(statistics);
-        var response = await client.PlayerDataManagement.UpdatePlayerStatisticsAsync(request, titleId, sessionTicket);
+        var response = await client.PlayerDataManagement.UpdatePlayerStatisticsAsync(request, TitleId, SessionTicket);
 
         Assert.That(response, Is.EqualTo(fakeResponse));
         Assert.That(handler.LastRequest, Is.Not.Null);
@@ -96,15 +90,12 @@ public class MemoriaTest
     [Test]
     public async Task UpdatePlayerStatistics_WithUserOptionTest()
     {
-        const string titleId = "HogeTitleId";
-        const string sessionTicket = "FAKE_SESSION_TICKET";
-
         var userOption = new UserOption(
             new LoginResult
             {
-                SessionTicket = sessionTicket,
+                SessionTicket = SessionTicket,
                 NewlyCreated = true
-            }, TitleId: titleId);
+            }, TitleId: TitleId);
 
         var handler = new MoqPlayFabHandler();
         var fakeResponse = new UpdatePlayerStatisticsResponse();
@@ -117,7 +108,7 @@ public class MemoriaTest
             new StatisticUpdate
             {
                 StatisticName = "HighScore",
-                Value = 2000,
+                Value = "2000",
             },
         };
         var request = new UpdatePlayerStatisticsRequest(statistics);
@@ -133,8 +124,6 @@ public class MemoriaTest
     [Test]
     public async Task UpdateUserTitleDisplayNameTest()
     {
-        const string titleId = "HogeTitleId";
-        const string sessionTicket = "FAKE_SESSION_TICKET";
         const string newDisplayName = "NewDisplayName";
 
         var handler = new MoqPlayFabHandler();
@@ -149,7 +138,7 @@ public class MemoriaTest
         handler.ResponseData = fakeResponse;
         var client = new PlayFabClient(handler);
         var request = new UpdateUserTitleDisplayNameRequest(newDisplayName);
-        var response = await client.AccountManagement.UpdateUserTitleDisplayNameAsync(request, titleId, sessionTicket);
+        var response = await client.AccountManagement.UpdateUserTitleDisplayNameAsync(request, TitleId, SessionTicket);
 
         Assert.That(response, Is.EqualTo(fakeResponse));
         Assert.That(handler.LastRequest, Is.Not.Null);
@@ -160,16 +149,14 @@ public class MemoriaTest
     [Test]
     public async Task UpdateUserTitleDisplayNameAsync_WithUserOptionTest()
     {
-        const string titleId = "HogeTitleId";
-        const string sessionTicket = "FAKE_SESSION_TICKET";
         const string newDisplayName = "AnotherNewDisplayName";
 
         var userOption = new UserOption(
             new LoginResult
             {
-                SessionTicket = sessionTicket,
+                SessionTicket = SessionTicket,
                 NewlyCreated = true
-            }, TitleId: titleId);
+            }, TitleId: TitleId);
         var handler = new MoqPlayFabHandler();
         var fakeResponse = new UpdateUserTitleDisplayNameResponse
         {
@@ -189,5 +176,51 @@ public class MemoriaTest
         Assert.That(handler.LastRequest, Is.Not.Null);
         Assert.That(handler.LastRequest.RequestUri!.ToString(), Contains.Substring("/Client/UpdateUserTitleDisplayName"));
         Assert.That(handler.LastRequestBody, Contains.Substring(newDisplayName));
+    }
+
+    [Test]
+    public async Task SendRankingDataTest()
+    {
+        const string playerName = "PlayerOne";
+        const string statisticName = "HighScore";
+        const int scoreValue = 1500;
+
+        var handler = new MoqPlayFabHandler();
+        handler.ResponseData = new LoginWithCustomIdResponse()
+        {
+            Result = new LoginResult
+            {
+                SessionTicket = SessionTicket,
+                NewlyCreated = true,
+            },
+        };
+
+        var data = new RankingData<int>
+        {
+            PlayerName = playerName,
+            StatisticName = statisticName,
+            Score = scoreValue
+        };
+
+        var client = new PlayFabClient(handler);
+        var register = new RankingRegister(TitleId, client);
+        await register.SendAsync(data);
+
+        Assert.That(handler.LastRequest, Is.Not.Null);
+        Assert.That(handler.LastRequestBody, Contains.Substring(statisticName));
+        Assert.That(handler.LastRequestBody, Contains.Substring(scoreValue.ToString()));
+
+        var data2 = new RankingData<int>
+        {
+            PlayerName = "PlayerTwo",
+            StatisticName = statisticName,
+            Score = scoreValue + 500
+        };
+
+        await register.SendAsync(data2);
+
+        Assert.That(handler.LastRequest, Is.Not.Null);
+        Assert.That(handler.LastRequestBody, Contains.Substring(statisticName));
+        Assert.That(handler.LastRequestBody, Contains.Substring((scoreValue + 500).ToString()));
     }
 }
