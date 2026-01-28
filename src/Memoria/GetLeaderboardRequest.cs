@@ -11,5 +11,5 @@ public record GetLeaderboardRequest(int StartPosition, string StatisticName, uin
     /// <summary>
     /// 最大取得件数(最大100).
     /// </summary>
-    public uint MaxResultsCount { get; init; } = MaxResultsCount > 100 ? 100 : MaxResultsCount;
+    public uint MaxResultsCount { get; } = Math.Min(MaxResultsCount, 100u);
 }

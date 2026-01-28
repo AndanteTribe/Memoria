@@ -11,7 +11,7 @@ public record UpdateUserTitleDisplayNameResponse
     /// レスポンスデータ.
     /// </summary>
     [JsonPropertyName("data")]
-    public UpdateUserTitleDisplayNameResult Result { get; init; }
+    public UpdateUserTitleDisplayNameResult Result { get; init; } = null!;
 }
 
 /// <summary>

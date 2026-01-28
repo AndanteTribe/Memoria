@@ -11,7 +11,7 @@ public class GetLeaderboardResponse
     /// リーダーボード取得結果.
     /// </summary>
     [JsonPropertyName("data")]
-    public GetLeaderboardResult Result { get; set; } = null!;
+    public GetLeaderboardResult Result { get; init; } = null!;
 }
 
 /// <summary>

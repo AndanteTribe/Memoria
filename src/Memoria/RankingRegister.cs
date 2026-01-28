@@ -43,8 +43,8 @@ public class RankingRegister
             new StatisticUpdate
             {
                 StatisticName = rankingData.StatisticName,
-                Value = rankingData.Score!.ToString(),
-            },
+                Value = rankingData.Score!.ToString()!
+            }
         };
 
         await _client.PlayerDataManagement.UpdatePlayerStatisticsAsync(
