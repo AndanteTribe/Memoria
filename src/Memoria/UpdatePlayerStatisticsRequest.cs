@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace Memoria;
 
 /// <summary>
@@ -26,5 +24,5 @@ public record StatisticUpdate
     /// <summary>
     /// 統計情報の値.
     /// </summary>
-    public string Value { get; init; } = string.Empty;
+    public string? Value { get; init; } = string.Empty;
 }

@@ -23,4 +23,23 @@ public interface IPlayerDataManagement
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     ValueTask<UpdatePlayerStatisticsResponse> UpdatePlayerStatisticsAsync(UpdatePlayerStatisticsRequest request, UserOption userOption, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// リーダーボードを取得する.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="titleId"></param>
+    /// <param name="xAuthorization"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    ValueTask<GetLeaderboardResponse> GetLeaderboardAsync(GetLeaderboardRequest request, string titleId, string xAuthorization, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// リーダーボードを取得する(ユーザーオプション付き).
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="userOption"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    ValueTask<GetLeaderboardResponse> GetLeaderboardAsync(GetLeaderboardRequest request, UserOption userOption, CancellationToken cancellationToken = default);
 }

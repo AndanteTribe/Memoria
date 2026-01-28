@@ -136,6 +136,35 @@ public class PlayFabClient : IAuthentication, IAccountManagement, IPlayerDataMan
         return response;
     }
 
+    async ValueTask<GetLeaderboardResponse> IPlayerDataManagement.GetLeaderboardAsync(
+        GetLeaderboardRequest request,
+        string titleId,
+        string xAuthorization,
+        CancellationToken cancellationToken)
+    {
+        var response = await SendPlayFabRequestAsync<GetLeaderboardRequest, GetLeaderboardResponse>(
+            titleId,
+            "/Client/GetLeaderboard",
+            request,
+            xAuthorization,
+            cancellationToken);
+        return response;
+    }
+
+    async ValueTask<GetLeaderboardResponse> IPlayerDataManagement.GetLeaderboardAsync(
+        GetLeaderboardRequest request,
+        UserOption userOption,
+        CancellationToken cancellationToken)
+    {
+        var response = await SendPlayFabRequestAsync<GetLeaderboardRequest, GetLeaderboardResponse>(
+            userOption.TitleId,
+            "/Client/GetLeaderboard",
+            request,
+            userOption.LoginResult.SessionTicket,
+            cancellationToken);
+        return response;
+    }
+
     /// <summary>
     /// PlayFabへのHTTPリクエストを処理する汎用メソッド
     /// </summary>
