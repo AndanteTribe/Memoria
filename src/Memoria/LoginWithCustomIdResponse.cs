@@ -11,7 +11,7 @@ public record LoginWithCustomIdResponse
     /// レスポンスデータ.
     /// </summary>
     [JsonPropertyName("data")]
-    public LoginResult Result { get; init; }
+    public LoginResult Result { get; init; } = null!;
 }
 
 /// <summary>

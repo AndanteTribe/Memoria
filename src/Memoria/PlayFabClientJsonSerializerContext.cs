@@ -16,6 +16,10 @@ namespace Memoria;
 [JsonSerializable(typeof(StatisticUpdate))]
 [JsonSerializable(typeof(LoginResult))]
 [JsonSerializable(typeof(UpdateUserTitleDisplayNameResult))]
+[JsonSerializable(typeof(GetLeaderboardResponse))]
+[JsonSerializable(typeof(GetLeaderboardResult))]
+[JsonSerializable(typeof(PlayerLeaderboardEntry))]
+[JsonSerializable(typeof(GetLeaderboardRequest))]
 public partial class PlayFabClientJsonSerializerContext : JsonSerializerContext
 {
 

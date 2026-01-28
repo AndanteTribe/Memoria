@@ -223,4 +223,94 @@ public class MemoriaTest
         Assert.That(handler.LastRequestBody, Contains.Substring(statisticName));
         Assert.That(handler.LastRequestBody, Contains.Substring((scoreValue + 500).ToString()));
     }
+
+    [Test]
+    public async Task GetLeaderboardTest()
+    {
+        var handler = new MoqPlayFabHandler();
+        var fakeResponse = new GetLeaderboardResponse
+        {
+            Result = new GetLeaderboardResult
+            {
+                Leaderboard =
+                [
+                    new PlayerLeaderboardEntry
+                    {
+                        DisplayName = "PlayerOne",
+                        PlayFabId = "FAKE_PLAYFAB_ID_1",
+                        Position = 0,
+                        StatValue = 2000,
+                    },
+                    new PlayerLeaderboardEntry
+                    {
+                        DisplayName = "PlayerTwo",
+                        PlayFabId = "FAKE_PLAYFAB_ID_2",
+                        Position = 1,
+                        StatValue = 1500,
+                    }
+                ]
+            }
+        };
+
+        var request = new GetLeaderboardRequest(0, "HighScore");
+        handler.ResponseData = fakeResponse;
+        var client = new PlayFabClient(handler);
+        var response = await client.PlayerDataManagement.GetLeaderboardAsync(request, TitleId, SessionTicket);
+
+        var jsonResponse = System.Text.Json.JsonSerializer.Serialize(response);
+        var jsonFakeResponse = System.Text.Json.JsonSerializer.Serialize(fakeResponse);
+
+        Assert.That(jsonResponse, Is.EqualTo(jsonFakeResponse));
+        Assert.That(handler.LastRequest, Is.Not.Null);
+        Assert.That(handler.LastRequest.RequestUri!.ToString(), Contains.Substring("/Client/GetLeaderboard"));
+        Assert.That(handler.LastRequestBody, Contains.Substring("HighScore"));
+    }
+
+    [Test]
+    public async Task GetLeaderboard_WithUserOptionTest()
+    {
+        var userOption = new UserOption(
+            new LoginResult
+            {
+                SessionTicket = SessionTicket,
+                NewlyCreated = true
+            }, TitleId: TitleId);
+
+        var handler = new MoqPlayFabHandler();
+        var fakeResponse = new GetLeaderboardResponse
+        {
+            Result = new GetLeaderboardResult
+            {
+                Leaderboard =
+                [
+                    new PlayerLeaderboardEntry
+                    {
+                        DisplayName = "PlayerOne",
+                        PlayFabId = "FAKE_PLAYFAB_ID_1",
+                        Position = 0,
+                        StatValue = 2000,
+                    },
+                    new PlayerLeaderboardEntry
+                    {
+                        DisplayName = "PlayerTwo",
+                        PlayFabId = "FAKE_PLAYFAB_ID_2",
+                        Position = 1,
+                        StatValue = 1500,
+                    }
+                ]
+            }
+        };
+        var request = new GetLeaderboardRequest(0, "HighScore");
+        handler.ResponseData = fakeResponse;
+        var client = new PlayFabClient(handler);
+        var response = await client.PlayerDataManagement.GetLeaderboardAsync(request, userOption);
+
+        var jsonResponse = System.Text.Json.JsonSerializer.Serialize(response);
+        var jsonFakeResponse = System.Text.Json.JsonSerializer.Serialize(fakeResponse);
+
+        Assert.That(jsonResponse, Is.EqualTo(jsonFakeResponse));
+        Assert.That(handler.LastRequest, Is.Not.Null);
+        Assert.That(handler.LastRequest.RequestUri!.ToString(), Contains.Substring("/Client/GetLeaderboard"));
+        Assert.That(handler.LastRequestBody, Contains.Substring("HighScore"));
+    }
 }
