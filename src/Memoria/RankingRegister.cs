@@ -53,4 +53,44 @@ public class RankingRegister
             cancellationToken
             );
     }
+
+    /// <summary>
+    /// ランキングデータをロードする.
+    /// </summary>
+    /// <param name="statisticName"></param>
+    /// <param name="maxResultsCount"></param>
+    /// <param name="cancellationToken"></param>
+    /// <typeparam name="T"></typeparam>
+    public async ValueTask<RankingData<T>[]> LoadAsync<T>(
+        string statisticName,
+        uint maxResultsCount = 10,
+        CancellationToken cancellationToken = default)
+    {
+        var loginRequest = new LoginWithCustomIdRequest(_titleId)
+        {
+            CustomId = Guid.NewGuid(),
+            CreateAccount = true,
+        };
+
+        _userOption ??= await _client.Authentication.LoginAndGetUserOptionAsync(loginRequest, cancellationToken);
+        var leaderboardRequest = new GetLeaderboardRequest(0, statisticName, maxResultsCount);
+        var leaderboardResponse = await _client.PlayerDataManagement.GetLeaderboardAsync(
+            leaderboardRequest,
+            _userOption,
+            cancellationToken
+            );
+
+        var results = new RankingData<T>[leaderboardResponse.Result.Leaderboard.Length];
+        for (int i = 0; i < leaderboardResponse.Result.Leaderboard.Length; i++)
+        {
+            var entry = leaderboardResponse.Result.Leaderboard[i];
+            results[i] = new RankingData<T>
+            {
+                PlayerName = entry.DisplayName,
+                StatisticName = statisticName,
+                Score = entry.StatValue is T value ? value : default!,
+            };
+        }
+        return results;
+    }
 }

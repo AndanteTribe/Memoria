@@ -313,4 +313,46 @@ public class MemoriaTest
         Assert.That(handler.LastRequest.RequestUri!.ToString(), Contains.Substring("/Client/GetLeaderboard"));
         Assert.That(handler.LastRequestBody, Contains.Substring("HighScore"));
     }
+
+    [Test]
+    public async Task LoadRankingDataTest()
+    {
+        const string statisticName = "HighScore";
+
+        var handler = new MoqPlayFabHandler();
+        var fakeResponse = new GetLeaderboardResponse
+        {
+            Result = new GetLeaderboardResult
+            {
+                Leaderboard =
+                [
+                    new PlayerLeaderboardEntry
+                    {
+                        DisplayName = "PlayerOne",
+                        PlayFabId = "FAKE_PLAYFAB_ID_1",
+                        Position = 0,
+                        StatValue = 2500,
+                    },
+                    new PlayerLeaderboardEntry
+                    {
+                        DisplayName = "PlayerTwo",
+                        PlayFabId = "FAKE_PLAYFAB_ID_2",
+                        Position = 1,
+                        StatValue = 2000,
+                    }
+                ]
+            }
+        };
+
+        handler.ResponseData = fakeResponse;
+        var client = new PlayFabClient(handler);
+        var register = new RankingRegister(TitleId, client);
+        var rankings = await register.LoadAsync<int>(statisticName, maxResultsCount: 2);
+
+        Assert.That(rankings.Length, Is.EqualTo(2));
+        Assert.That(rankings[0].PlayerName, Is.EqualTo("PlayerOne"));
+        Assert.That(rankings[0].Score, Is.EqualTo(2500));
+        Assert.That(rankings[1].PlayerName, Is.EqualTo("PlayerTwo"));
+        Assert.That(rankings[1].Score, Is.EqualTo(2000));
+    }
 }
