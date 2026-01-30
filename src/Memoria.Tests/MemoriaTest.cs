@@ -74,7 +74,7 @@ public class MemoriaTest
             new StatisticUpdate
             {
                 StatisticName = "HighScore",
-                Value = "1000",
+                Value = 1000,
             },
         };
         var request = new UpdatePlayerStatisticsRequest(statistics);
@@ -108,7 +108,7 @@ public class MemoriaTest
             new StatisticUpdate
             {
                 StatisticName = "HighScore",
-                Value = "2000",
+                Value = 2000,
             },
         };
         var request = new UpdatePlayerStatisticsRequest(statistics);
@@ -195,7 +195,7 @@ public class MemoriaTest
             },
         };
 
-        var data = new RankingData<int>
+        var data = new RankingData
         {
             PlayerName = playerName,
             StatisticName = statisticName,
@@ -203,14 +203,14 @@ public class MemoriaTest
         };
 
         var client = new PlayFabClient(handler);
-        var register = new RankingRegister(TitleId, client);
+        var register = new RankingRepository(TitleId, client);
         await register.SendAsync(data);
 
         Assert.That(handler.LastRequest, Is.Not.Null);
         Assert.That(handler.LastRequestBody, Contains.Substring(statisticName));
         Assert.That(handler.LastRequestBody, Contains.Substring(scoreValue.ToString()));
 
-        var data2 = new RankingData<int>
+        var data2 = new RankingData
         {
             PlayerName = "PlayerTwo",
             StatisticName = statisticName,
@@ -346,8 +346,8 @@ public class MemoriaTest
 
         handler.ResponseData = fakeResponse;
         var client = new PlayFabClient(handler);
-        var register = new RankingRegister(TitleId, client);
-        var rankings = await register.LoadAsync<int>(statisticName, maxResultsCount: 2);
+        var register = new RankingRepository(TitleId, client);
+        var rankings = await register.LoadAsync(statisticName, maxResultsCount: 2);
 
         Assert.That(rankings.Length, Is.EqualTo(2));
         Assert.That(rankings[0].PlayerName, Is.EqualTo("PlayerOne"));

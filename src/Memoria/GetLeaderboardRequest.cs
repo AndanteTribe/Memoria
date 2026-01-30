@@ -6,7 +6,7 @@ namespace Memoria;
 /// <param name="StartPosition"></param>
 /// <param name="StatisticName"></param>
 /// <param name="MaxResultsCount"></param>
-public record GetLeaderboardRequest(int StartPosition, string StatisticName, uint MaxResultsCount = 10)
+public record GetLeaderboardRequest(int StartPosition, string StatisticName, uint MaxResultsCount = 10u)
 {
     /// <summary>
     /// 最大取得件数(最大100).

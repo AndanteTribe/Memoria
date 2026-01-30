@@ -242,7 +242,7 @@ MonoBehaviour:
   _fieldName: {fileID: 516809492}
   _fieldScore: {fileID: 88539547}
   _fieldTitleId: {fileID: 911981740}
-  _leaderboardText: {fileID: 0}
+  _leaderboardText: {fileID: 445406244}
   _registerButton: {fileID: 1031720223}
   _getLeaderboardButton: {fileID: 1894514345}
 --- !u!1 &67418006

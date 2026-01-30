@@ -3,8 +3,7 @@ namespace Memoria;
 /// <summary>
 /// ランキングデータクラス.
 /// </summary>
-/// <typeparam name="T"></typeparam>
-public record RankingData<T>
+public record RankingData
 {
     /// <summary>
     /// 登録する際のプレイヤー名.
@@ -19,5 +18,5 @@ public record RankingData<T>
     /// <summary>
     /// スコアデータ.
     /// </summary>
-    public T Score { get; set; } = default!;
+    public int Score { get; set; }
 }

@@ -1,12 +1,11 @@
 using System;
 using System.Text;
 using System.Threading;
-using Memoria;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Script.Runtime
+namespace Memoria.Sample
 {
     /// <summary>
     /// ランキング登録と取得のプレゼンター.
@@ -49,8 +48,8 @@ namespace Script.Runtime
         [SerializeField]
         private Button _getLeaderboardButton;
 
-        private const string StaticsName = "HighScore";
-        private RankingRegister _register;
+        private const string StatisticName = "HighScore";
+        private IRankingRepository _register;
         private string _playerName;
         private string _titleId;
         private int _playerScore;
@@ -92,8 +91,9 @@ namespace Script.Runtime
         /// <param name="cancellationToken"></param>
         private async Awaitable RegisterScoreAsync(CancellationToken cancellationToken)
         {
-            _register = new RankingRegister(_titleId);
-            var data = new RankingData<int>
+            _register ??= new RankingRepository(_titleId);
+
+            var data = new RankingData
             {
                 PlayerName = _playerName,
                 Score = _playerScore
@@ -115,12 +115,13 @@ namespace Script.Runtime
         /// <param name="cancellationToken"></param>
         private async Awaitable GetLeaderboardAsync(CancellationToken cancellationToken)
         {
-            _register = new RankingRegister(_titleId);
             try
             {
-                var response = await _register.LoadAsync<int>(StaticsName, maxResultsCount: 5, cancellationToken);
+                _register ??= new RankingRepository(_titleId);
+
+                var response = await _register.LoadAsync(StatisticName, maxResultsCount: 5, cancellationToken);
                 var sb = new StringBuilder();
-                for (int i = 0; i < response.AsSpan().Length; i++)
+                for (int i = 0; i < response.Length; i++)
                 {
                     sb.AppendLine($"{i + 1}. {response[i].PlayerName} : {response[i].Score}");
                 }
