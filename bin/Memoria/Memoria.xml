@@ -394,11 +394,6 @@
             ランキングデータを送受信するクラス.
             </summary>
         </member>
-        <member name="F:Memoria.RankingClient._client">
-            <summary>
-            PlayFabクライアント.
-            </summary>
-        </member>
         <member name="M:Memoria.RankingClient.#ctor(System.String,Memoria.PlayFabClient)">
             <summary>
             コンストラクタ.
