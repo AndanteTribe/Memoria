@@ -182,7 +182,6 @@ public class MemoriaTest
     public async Task SendRankingDataTest()
     {
         const string playerName = "PlayerOne";
-        const string statisticName = "HighScore";
         const int scoreValue = 1500;
 
         var handler = new MoqPlayFabHandler();
@@ -195,32 +194,20 @@ public class MemoriaTest
             },
         };
 
-        var data = new RankingData
-        {
-            PlayerName = playerName,
-            StatisticName = statisticName,
-            Score = scoreValue
-        };
-
         var client = new PlayFabClient(handler);
-        RankingClient.Client = client;
-        await RankingClient.SendAsync(TitleId,data);
+        var rankingClient = new RankingClient(TitleId, client);
+        await rankingClient.LoginAsync();
+
+        await rankingClient.SendAsync(playerName, 100);
 
         Assert.That(handler.LastRequest, Is.Not.Null);
-        Assert.That(handler.LastRequestBody, Contains.Substring(statisticName));
-        Assert.That(handler.LastRequestBody, Contains.Substring(scoreValue.ToString()));
+        Assert.That(handler.LastRequestBody, Contains.Substring(playerName));
+        Assert.That(handler.LastRequestBody, Contains.Substring(100.ToString()));
 
-        var data2 = new RankingData
-        {
-            PlayerName = "PlayerTwo",
-            StatisticName = statisticName,
-            Score = scoreValue + 500
-        };
-
-        await RankingClient.SendAsync(TitleId, data2);
+        await rankingClient.SendAsync(playerName, scoreValue + 500);
 
         Assert.That(handler.LastRequest, Is.Not.Null);
-        Assert.That(handler.LastRequestBody, Contains.Substring(statisticName));
+        Assert.That(handler.LastRequestBody, Contains.Substring(playerName));
         Assert.That(handler.LastRequestBody, Contains.Substring((scoreValue + 500).ToString()));
     }
 
@@ -317,8 +304,6 @@ public class MemoriaTest
     [Test]
     public async Task LoadRankingDataTest()
     {
-        const string statisticName = "HighScore";
-
         var handler = new MoqPlayFabHandler();
         var fakeResponse = new GetLeaderboardResponse
         {
@@ -346,13 +331,14 @@ public class MemoriaTest
 
         handler.ResponseData = fakeResponse;
         var client = new PlayFabClient(handler);
-        RankingClient.Client = client;
-        var rankings = await RankingClient.LoadAsync(TitleId, statisticName, maxResultsCount: 2);
+        var rankingClient = new RankingClient(TitleId, client);
+        await rankingClient.LoginAsync();
+        var rankings = await rankingClient.LoadAsync();
 
         Assert.That(rankings.Length, Is.EqualTo(2));
-        Assert.That(rankings[0].PlayerName, Is.EqualTo("PlayerOne"));
-        Assert.That(rankings[0].Score, Is.EqualTo(2500));
-        Assert.That(rankings[1].PlayerName, Is.EqualTo("PlayerTwo"));
-        Assert.That(rankings[1].Score, Is.EqualTo(2000));
+        Assert.That(rankings[0].playerName, Is.EqualTo("PlayerOne"));
+        Assert.That(rankings[0].score, Is.EqualTo(2500));
+        Assert.That(rankings[1].playerName, Is.EqualTo("PlayerTwo"));
+        Assert.That(rankings[1].score, Is.EqualTo(2000));
     }
 }

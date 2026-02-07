@@ -170,27 +170,6 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="T:Memoria.IRankingRepository">
-            <summary>
-            ランキングの登録と取得を行うリポジトリ.
-            </summary>
-        </member>
-        <member name="M:Memoria.IRankingRepository.SendAsync(Memoria.RankingData,System.Threading.CancellationToken)">
-            <summary>
-            ランキングデータを送信する.
-            </summary>
-            <param name="rankingData"></param>
-            <param name="cancellationToken"></param>
-        </member>
-        <member name="M:Memoria.IRankingRepository.LoadAsync(System.String,System.UInt32,System.Threading.CancellationToken)">
-            <summary>
-            ランキングデータを取得する.
-            </summary>
-            <param name="statisticName"></param>
-            <param name="maxResultsCount"></param>
-            <param name="cancellationToken"></param>
-            <returns></returns>
-        </member>
         <member name="T:Memoria.LoginWithCustomIdRequest">
             <summary>
             カスタムIDでログインするリクエスト.
@@ -412,50 +391,45 @@
         </member>
         <member name="T:Memoria.RankingClient">
             <summary>
-            ランキングリポジトリ.
+            ランキングデータを送受信するクラス.
             </summary>
         </member>
-        <member name="P:Memoria.RankingClient.Client">
+        <member name="F:Memoria.RankingClient._client">
             <summary>
             PlayFabクライアント.
             </summary>
         </member>
-        <member name="M:Memoria.RankingClient.SendAsync(System.String,Memoria.RankingData,System.Threading.CancellationToken)">
+        <member name="M:Memoria.RankingClient.#ctor(System.String,Memoria.PlayFabClient)">
+            <summary>
+            コンストラクタ.
+            モックを使用する場合はclientに注入する.
+            </summary>
+            <param name="titleId"></param>
+            <param name="client"></param>
+        </member>
+        <member name="M:Memoria.RankingClient.LoginAsync(System.Threading.CancellationToken)">
+            <summary>
+            PlayFabにログインする.
+            必ず最初に呼び出すこと.
+            </summary>
+            <param name="cancellationToken"></param>
+        </member>
+        <member name="M:Memoria.RankingClient.SendAsync(System.String,System.Int32,System.String,System.Threading.CancellationToken)">
             <summary>
             ランキングデータを送信する.
             </summary>
-            <param name="titleId"></param>
-            <param name="rankingData"></param>
+            <param name="playerName"></param>
+            <param name="score"></param>
+            <param name="statisticsName"></param>
             <param name="cancellationToken"></param>
         </member>
-        <member name="M:Memoria.RankingClient.LoadAsync(System.String,System.String,System.UInt32,System.Threading.CancellationToken)">
+        <member name="M:Memoria.RankingClient.LoadAsync(System.String,System.UInt32,System.Threading.CancellationToken)">
             <summary>
             ランキングデータをロードする.
             </summary>
-            <param name="titleId"></param>
             <param name="statisticName"></param>
             <param name="maxResultsCount"></param>
             <param name="cancellationToken"></param>
-        </member>
-        <member name="T:Memoria.RankingData">
-            <summary>
-            ランキングデータクラス.
-            </summary>
-        </member>
-        <member name="P:Memoria.RankingData.PlayerName">
-            <summary>
-            登録する際のプレイヤー名.
-            </summary>
-        </member>
-        <member name="P:Memoria.RankingData.StatisticName">
-            <summary>
-            統計情報の名前.
-            </summary>
-        </member>
-        <member name="P:Memoria.RankingData.Score">
-            <summary>
-            スコアデータ.
-            </summary>
         </member>
         <member name="T:Memoria.UpdatePlayerStatisticsRequest">
             <summary>

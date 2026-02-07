@@ -12,48 +12,34 @@ namespace Memoria.Sample
     /// </summary>
     public class RankingPresenter : MonoBehaviour
     {
-        /// <summary>
-        /// タイトルID.
-        /// </summary>
-        [SerializeField]
+        [SerializeField, Tooltip("タイトルID")]
         private string _titleId;
 
-        /// <summary>
-        /// 登録するプレイヤー名の入力フィールド.
-        /// </summary>
-        [SerializeField]
+        [SerializeField, Tooltip("登録するプレイヤー名の入力フィールド")]
         private TMP_InputField _fieldName;
 
-        /// <summary>
-        /// 登録するスコアの入力フィールド.
-        /// </summary>
-        [SerializeField]
+        [SerializeField, Tooltip("登録するスコアの入力フィールド")]
         private TMP_InputField _fieldScore;
 
-        /// <summary>
-        /// ランキング表示用テキスト.
-        /// </summary>
-        [SerializeField]
+        [SerializeField, Tooltip("ランキング表示用テキスト")]
         private TextMeshProUGUI _leaderboardText;
 
-        /// <summary>
-        /// スコア登録ボタン.
-        /// </summary>
-        [SerializeField]
+        [SerializeField, Tooltip("スコア登録ボタン")]
         private Button _registerButton;
 
-        /// <summary>
-        /// ランキング取得ボタン.
-        /// </summary>
-        [SerializeField]
+        [SerializeField, Tooltip("ランキング取得ボタン")]
         private Button _getLeaderboardButton;
 
+        private RankingClient _rankingClient;
         private const string StatisticName = "HighScore";
         private string _playerName;
         private int _playerScore;
 
         private void Start()
         {
+            _rankingClient = new RankingClient(_titleId);
+            _rankingClient.LoginAsync(destroyCancellationToken);
+
             _fieldName.onEndEdit.AddListener(text =>
             {
                 _playerName = text;
@@ -84,14 +70,9 @@ namespace Memoria.Sample
         /// <param name="cancellationToken"></param>
         private async Awaitable RegisterScoreAsync(CancellationToken cancellationToken)
         {
-            var data = new RankingData
-            {
-                PlayerName = _playerName,
-                Score = _playerScore
-            };
             try
             {
-                await RankingClient.SendAsync(_titleId, data, cancellationToken);
+                await _rankingClient.SendAsync(_playerName, _playerScore, StatisticName, cancellationToken);
                 Debug.Log("Score registered successfully.");
             }
             catch (Exception ex)
@@ -108,11 +89,11 @@ namespace Memoria.Sample
         {
             try
             {
-                var response = await RankingClient.LoadAsync(_titleId, StatisticName, maxResultsCount: 5, cancellationToken);
+                var response = await _rankingClient.LoadAsync(StatisticName, 5, cancellationToken);
                 var sb = new StringBuilder();
                 for (int i = 0; i < response.Length; i++)
                 {
-                    sb.AppendLine($"{i + 1}. {response[i].PlayerName} : {response[i].Score}");
+                    sb.AppendLine($"{i + 1}. {response[i].playerName} : {response[i].score}");
                 }
 
                 _leaderboardText.text = sb.ToString();

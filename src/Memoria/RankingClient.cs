@@ -3,44 +3,67 @@ namespace Memoria;
 /// <summary>
 /// ランキングデータを送受信するクラス.
 /// </summary>
-public static class RankingClient
+public class RankingClient
 {
-    /// <summary>
-    /// PlayFabクライアント.
-    /// </summary>
-    public static PlayFabClient Client { get; set; } = new();
-    private static UserOption? s_userOption;
+    private readonly PlayFabClient _client;
+    private UserOption? _userOption;
+    private readonly string _titleId;
 
     /// <summary>
-    /// ランキングデータを送信する.
+    /// コンストラクタ.
+    /// モックを使用する場合はclientに注入する.
     /// </summary>
     /// <param name="titleId"></param>
-    /// <param name="rankingData"></param>
-    /// <param name="cancellationToken"></param>
-    public static async ValueTask SendAsync(string titleId, RankingData rankingData, CancellationToken cancellationToken = default)
+    /// <param name="client"></param>
+    public RankingClient(string titleId, PlayFabClient? client = null)
     {
-        var loginRequest = new LoginWithCustomIdRequest(titleId)
+        _titleId = titleId;
+        _client = client ?? new PlayFabClient();
+    }
+
+    /// <summary>
+    /// PlayFabにログインする.
+    /// 必ず最初に呼び出すこと.
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    public async ValueTask LoginAsync(CancellationToken cancellationToken = default)
+    {
+        var loginRequest = new LoginWithCustomIdRequest(_titleId)
         {
             CustomId = Guid.NewGuid(),
             CreateAccount = true,
         };
 
-        s_userOption ??= await Client.Authentication.LoginAndGetUserOptionAsync(loginRequest, cancellationToken);
+        _userOption ??= await _client.Authentication.LoginAndGetUserOptionAsync(loginRequest, cancellationToken);
+    }
 
-        var nameRequest = new UpdateUserTitleDisplayNameRequest(rankingData.PlayerName);
-        await Client.AccountManagement.UpdateUserTitleDisplayNameAsync(nameRequest, s_userOption, cancellationToken);
+    /// <summary>
+    /// ランキングデータを送信する.
+    /// </summary>
+    /// <param name="playerName"></param>
+    /// <param name="score"></param>
+    /// <param name="statisticsName"></param>
+    /// <param name="cancellationToken"></param>
+    public async ValueTask SendAsync(
+        string playerName,
+        int score,
+        string statisticsName = "HighScore",
+        CancellationToken cancellationToken = default)
+    {
+        var nameRequest = new UpdateUserTitleDisplayNameRequest(playerName);
+        await _client.AccountManagement.UpdateUserTitleDisplayNameAsync(nameRequest, _userOption!, cancellationToken);
         var statistics = new[]
         {
             new StatisticUpdate
             {
-                StatisticName = rankingData.StatisticName,
-                Value = rankingData.Score
+                StatisticName = statisticsName,
+                Value = score
             }
         };
 
-        await Client.PlayerDataManagement.UpdatePlayerStatisticsAsync(
+        await _client.PlayerDataManagement.UpdatePlayerStatisticsAsync(
             new UpdatePlayerStatisticsRequest(statistics),
-            s_userOption,
+            _userOption!,
             cancellationToken
             );
     }
@@ -48,40 +71,25 @@ public static class RankingClient
     /// <summary>
     /// ランキングデータをロードする.
     /// </summary>
-    /// <param name="titleId"></param>
     /// <param name="statisticName"></param>
     /// <param name="maxResultsCount"></param>
     /// <param name="cancellationToken"></param>
-    public static async ValueTask<RankingData[]> LoadAsync(
-        string titleId,
-        string statisticName,
+    public async ValueTask<(string playerName, int score)[]> LoadAsync(
+        string statisticName = "HighScore",
         uint maxResultsCount = 10,
         CancellationToken cancellationToken = default)
     {
-        var loginRequest = new LoginWithCustomIdRequest(titleId)
-        {
-            CustomId = Guid.NewGuid(),
-            CreateAccount = true,
-        };
-
-        s_userOption ??= await Client.Authentication.LoginAndGetUserOptionAsync(loginRequest, cancellationToken);
         var leaderboardRequest = new GetLeaderboardRequest(0, statisticName, maxResultsCount);
-        var leaderboardResponse = await Client.PlayerDataManagement.GetLeaderboardAsync(
+        var leaderboardResponse = await _client.PlayerDataManagement.GetLeaderboardAsync(
             leaderboardRequest,
-            s_userOption,
+            _userOption!,
             cancellationToken
             );
-
-        var results = new RankingData[leaderboardResponse.Result.Leaderboard.Length];
+        var results = new (string, int score)[leaderboardResponse.Result.Leaderboard.Length];
         for (int i = 0; i < leaderboardResponse.Result.Leaderboard.Length; i++)
         {
             var entry = leaderboardResponse.Result.Leaderboard[i];
-            results[i] = new RankingData
-            {
-                PlayerName = entry.DisplayName,
-                StatisticName = statisticName,
-                Score = entry.StatValue
-            };
+            results[i] = (entry.DisplayName, entry.StatValue);
         }
         return results;
     }
