@@ -10,6 +10,7 @@
             </summary>
             <param name="StartPosition"></param>
             <param name="StatisticName"></param>
+            <param name="MaxResultsCount"></param>
         </member>
         <member name="M:Memoria.GetLeaderboardRequest.#ctor(System.Int32,System.String,System.UInt32)">
             <summary>
@@ -17,6 +18,7 @@
             </summary>
             <param name="StartPosition"></param>
             <param name="StatisticName"></param>
+            <param name="MaxResultsCount"></param>
         </member>
         <member name="P:Memoria.GetLeaderboardRequest.StartPosition">
             <summary></summary>
@@ -283,6 +285,11 @@
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
+        <member name="P:Memoria.PlayFabClientJsonSerializerContext.GetLeaderboardRequest">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
         <member name="P:Memoria.PlayFabClientJsonSerializerContext.GetLeaderboardResponse">
             <summary>
             Defines the source generated JSON serialization contract metadata for a given type.
@@ -358,6 +365,11 @@
             Defines the source generated JSON serialization contract metadata for a given type.
             </summary>
         </member>
+        <member name="P:Memoria.PlayFabClientJsonSerializerContext.UInt32">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
         <member name="P:Memoria.PlayFabClientJsonSerializerContext.Default">
             <summary>
             The default <see cref="T:System.Text.Json.Serialization.JsonSerializerContext"/> associated with a default <see cref="T:System.Text.Json.JsonSerializerOptions"/> instance.
@@ -377,46 +389,42 @@
         <member name="M:Memoria.PlayFabClientJsonSerializerContext.GetTypeInfo(System.Type)">
             <inheritdoc/>
         </member>
-        <member name="T:Memoria.RankingData`1">
+        <member name="T:Memoria.RankingClient">
             <summary>
-            ランキングデータクラス.
-            </summary>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="P:Memoria.RankingData`1.PlayerName">
-            <summary>
-            登録する際のプレイヤー名.
+            ランキングデータを送受信するクラス.
             </summary>
         </member>
-        <member name="P:Memoria.RankingData`1.StatisticName">
-            <summary>
-            統計情報の名前.
-            </summary>
-        </member>
-        <member name="P:Memoria.RankingData`1.Score">
-            <summary>
-            スコアデータ.
-            </summary>
-        </member>
-        <member name="T:Memoria.RankingRegister">
-            <summary>
-            ランキング登録クラス.
-            </summary>
-        </member>
-        <member name="M:Memoria.RankingRegister.#ctor(System.String,Memoria.PlayFabClient)">
+        <member name="M:Memoria.RankingClient.#ctor(System.String,Memoria.PlayFabClient)">
             <summary>
             コンストラクタ.
+            モックを使用する場合はclientに注入する.
             </summary>
             <param name="titleId"></param>
             <param name="client"></param>
         </member>
-        <member name="M:Memoria.RankingRegister.SendAsync``1(Memoria.RankingData{``0},System.Threading.CancellationToken)">
+        <member name="M:Memoria.RankingClient.LoginAsync(System.Threading.CancellationToken)">
+            <summary>
+            PlayFabにログインする.
+            必ず最初に呼び出すこと.
+            </summary>
+            <param name="cancellationToken"></param>
+        </member>
+        <member name="M:Memoria.RankingClient.SendAsync(System.String,System.Int32,System.String,System.Threading.CancellationToken)">
             <summary>
             ランキングデータを送信する.
             </summary>
-            <param name="rankingData"></param>
+            <param name="playerName"></param>
+            <param name="score"></param>
+            <param name="statisticsName"></param>
             <param name="cancellationToken"></param>
-            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Memoria.RankingClient.LoadAsync(System.String,System.UInt32,System.Threading.CancellationToken)">
+            <summary>
+            ランキングデータをロードする.
+            </summary>
+            <param name="statisticName"></param>
+            <param name="maxResultsCount"></param>
+            <param name="cancellationToken"></param>
         </member>
         <member name="T:Memoria.UpdatePlayerStatisticsRequest">
             <summary>

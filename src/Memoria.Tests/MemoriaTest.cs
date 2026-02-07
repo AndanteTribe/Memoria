@@ -74,7 +74,7 @@ public class MemoriaTest
             new StatisticUpdate
             {
                 StatisticName = "HighScore",
-                Value = "1000",
+                Value = 1000,
             },
         };
         var request = new UpdatePlayerStatisticsRequest(statistics);
@@ -108,7 +108,7 @@ public class MemoriaTest
             new StatisticUpdate
             {
                 StatisticName = "HighScore",
-                Value = "2000",
+                Value = 2000,
             },
         };
         var request = new UpdatePlayerStatisticsRequest(statistics);
@@ -182,7 +182,6 @@ public class MemoriaTest
     public async Task SendRankingDataTest()
     {
         const string playerName = "PlayerOne";
-        const string statisticName = "HighScore";
         const int scoreValue = 1500;
 
         var handler = new MoqPlayFabHandler();
@@ -195,32 +194,18 @@ public class MemoriaTest
             },
         };
 
-        var data = new RankingData<int>
-        {
-            PlayerName = playerName,
-            StatisticName = statisticName,
-            Score = scoreValue
-        };
-
         var client = new PlayFabClient(handler);
-        var register = new RankingRegister(TitleId, client);
-        await register.SendAsync(data);
+        var rankingClient = new RankingClient(TitleId, client);
+        await rankingClient.LoginAsync();
+
+        await rankingClient.SendAsync(playerName, 100);
 
         Assert.That(handler.LastRequest, Is.Not.Null);
-        Assert.That(handler.LastRequestBody, Contains.Substring(statisticName));
-        Assert.That(handler.LastRequestBody, Contains.Substring(scoreValue.ToString()));
+        Assert.That(handler.LastRequestBody, Contains.Substring(100.ToString()));
 
-        var data2 = new RankingData<int>
-        {
-            PlayerName = "PlayerTwo",
-            StatisticName = statisticName,
-            Score = scoreValue + 500
-        };
-
-        await register.SendAsync(data2);
+        await rankingClient.SendAsync(playerName, scoreValue + 500);
 
         Assert.That(handler.LastRequest, Is.Not.Null);
-        Assert.That(handler.LastRequestBody, Contains.Substring(statisticName));
         Assert.That(handler.LastRequestBody, Contains.Substring((scoreValue + 500).ToString()));
     }
 
@@ -312,5 +297,46 @@ public class MemoriaTest
         Assert.That(handler.LastRequest, Is.Not.Null);
         Assert.That(handler.LastRequest.RequestUri!.ToString(), Contains.Substring("/Client/GetLeaderboard"));
         Assert.That(handler.LastRequestBody, Contains.Substring("HighScore"));
+    }
+
+    [Test]
+    public async Task LoadRankingDataTest()
+    {
+        var handler = new MoqPlayFabHandler();
+        var fakeResponse = new GetLeaderboardResponse
+        {
+            Result = new GetLeaderboardResult
+            {
+                Leaderboard =
+                [
+                    new PlayerLeaderboardEntry
+                    {
+                        DisplayName = "PlayerOne",
+                        PlayFabId = "FAKE_PLAYFAB_ID_1",
+                        Position = 0,
+                        StatValue = 2500,
+                    },
+                    new PlayerLeaderboardEntry
+                    {
+                        DisplayName = "PlayerTwo",
+                        PlayFabId = "FAKE_PLAYFAB_ID_2",
+                        Position = 1,
+                        StatValue = 2000,
+                    }
+                ]
+            }
+        };
+
+        handler.ResponseData = fakeResponse;
+        var client = new PlayFabClient(handler);
+        var rankingClient = new RankingClient(TitleId, client);
+        await rankingClient.LoginAsync();
+        var rankings = await rankingClient.LoadAsync();
+
+        Assert.That(rankings.Length, Is.EqualTo(2));
+        Assert.That(rankings[0].playerName, Is.EqualTo("PlayerOne"));
+        Assert.That(rankings[0].score, Is.EqualTo(2500));
+        Assert.That(rankings[1].playerName, Is.EqualTo("PlayerTwo"));
+        Assert.That(rankings[1].score, Is.EqualTo(2000));
     }
 }
