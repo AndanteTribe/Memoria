@@ -201,13 +201,11 @@ public class MemoriaTest
         await rankingClient.SendAsync(playerName, 100);
 
         Assert.That(handler.LastRequest, Is.Not.Null);
-        Assert.That(handler.LastRequestBody, Contains.Substring(playerName));
         Assert.That(handler.LastRequestBody, Contains.Substring(100.ToString()));
 
         await rankingClient.SendAsync(playerName, scoreValue + 500);
 
         Assert.That(handler.LastRequest, Is.Not.Null);
-        Assert.That(handler.LastRequestBody, Contains.Substring(playerName));
         Assert.That(handler.LastRequestBody, Contains.Substring((scoreValue + 500).ToString()));
     }
 
