@@ -1,7 +1,7 @@
 namespace Memoria;
 
 /// <summary>
-/// ランキングリポジトリ.
+/// ランキングデータを送受信するクラス.
 /// </summary>
 public static class RankingClient
 {
