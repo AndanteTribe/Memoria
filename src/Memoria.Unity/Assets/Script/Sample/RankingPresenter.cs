@@ -38,7 +38,7 @@ namespace Memoria.Sample
         private void Start()
         {
             _rankingClient = new RankingClient(_titleId);
-            _rankingClient.LoginAsync(destroyCancellationToken);
+            _ = _rankingClient.LoginAsync(destroyCancellationToken);
 
             _fieldName.onEndEdit.AddListener(text =>
             {
