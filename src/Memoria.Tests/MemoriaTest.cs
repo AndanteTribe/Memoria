@@ -203,8 +203,8 @@ public class MemoriaTest
         };
 
         var client = new PlayFabClient(handler);
-        var register = new RankingRepository(TitleId, client);
-        await register.SendAsync(data);
+        RankingClient.Client = client;
+        await RankingClient.SendAsync(TitleId,data);
 
         Assert.That(handler.LastRequest, Is.Not.Null);
         Assert.That(handler.LastRequestBody, Contains.Substring(statisticName));
@@ -217,7 +217,7 @@ public class MemoriaTest
             Score = scoreValue + 500
         };
 
-        await register.SendAsync(data2);
+        await RankingClient.SendAsync(TitleId, data2);
 
         Assert.That(handler.LastRequest, Is.Not.Null);
         Assert.That(handler.LastRequestBody, Contains.Substring(statisticName));
@@ -346,8 +346,8 @@ public class MemoriaTest
 
         handler.ResponseData = fakeResponse;
         var client = new PlayFabClient(handler);
-        var register = new RankingRepository(TitleId, client);
-        var rankings = await register.LoadAsync(statisticName, maxResultsCount: 2);
+        RankingClient.Client = client;
+        var rankings = await RankingClient.LoadAsync(TitleId, statisticName, maxResultsCount: 2);
 
         Assert.That(rankings.Length, Is.EqualTo(2));
         Assert.That(rankings[0].PlayerName, Is.EqualTo("PlayerOne"));

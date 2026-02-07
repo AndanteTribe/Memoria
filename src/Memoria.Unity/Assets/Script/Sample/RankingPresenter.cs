@@ -13,6 +13,12 @@ namespace Memoria.Sample
     public class RankingPresenter : MonoBehaviour
     {
         /// <summary>
+        /// タイトルID.
+        /// </summary>
+        [SerializeField]
+        private string _titleId;
+
+        /// <summary>
         /// 登録するプレイヤー名の入力フィールド.
         /// </summary>
         [SerializeField]
@@ -23,12 +29,6 @@ namespace Memoria.Sample
         /// </summary>
         [SerializeField]
         private TMP_InputField _fieldScore;
-
-        /// <summary>
-        /// タイトルIDの入力フィールド.
-        /// </summary>
-        [SerializeField]
-        private TMP_InputField _fieldTitleId;
 
         /// <summary>
         /// ランキング表示用テキスト.
@@ -49,9 +49,7 @@ namespace Memoria.Sample
         private Button _getLeaderboardButton;
 
         private const string StatisticName = "HighScore";
-        private IRankingRepository _register;
         private string _playerName;
-        private string _titleId;
         private int _playerScore;
 
         private void Start()
@@ -67,11 +65,6 @@ namespace Memoria.Sample
                 {
                     _playerScore = score;
                 }
-            });
-
-            _fieldTitleId.onEndEdit.AddListener(text =>
-            {
-                _titleId = text;
             });
 
             _registerButton.onClick.AddListener(() =>
@@ -91,8 +84,6 @@ namespace Memoria.Sample
         /// <param name="cancellationToken"></param>
         private async Awaitable RegisterScoreAsync(CancellationToken cancellationToken)
         {
-            _register ??= new RankingRepository(_titleId);
-
             var data = new RankingData
             {
                 PlayerName = _playerName,
@@ -100,7 +91,7 @@ namespace Memoria.Sample
             };
             try
             {
-                await _register.SendAsync(data, cancellationToken);
+                await RankingClient.SendAsync(_titleId, data, cancellationToken);
                 Debug.Log("Score registered successfully.");
             }
             catch (Exception ex)
@@ -117,9 +108,7 @@ namespace Memoria.Sample
         {
             try
             {
-                _register ??= new RankingRepository(_titleId);
-
-                var response = await _register.LoadAsync(StatisticName, maxResultsCount: 5, cancellationToken);
+                var response = await RankingClient.LoadAsync(_titleId, StatisticName, maxResultsCount: 5, cancellationToken);
                 var sb = new StringBuilder();
                 for (int i = 0; i < response.Length; i++)
                 {
