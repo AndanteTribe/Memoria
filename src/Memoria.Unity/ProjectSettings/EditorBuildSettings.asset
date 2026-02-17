@@ -5,9 +5,12 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/RankingVRSample.unity
     guid: f2624fdf50ccf428fa651aed4942f102
+  - enabled: 1
+    path: Assets/Scenes/RankingVRSample.unity
+    guid: d55d8d85b8ebe4d51bdafcc028281074
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: b2b2a35e91c0941db9d67385b5be00b0, type: 2}
