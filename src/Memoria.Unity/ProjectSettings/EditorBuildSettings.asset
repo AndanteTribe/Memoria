@@ -11,9 +11,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Samples/Meta XR Core SDK/85.0.0/Sample Scenes/HandTest.unity
     guid: b9a31e08066d6e343a208d34ec298f09
-  - enabled: 1
+  - enabled: 0
     path: Assets/Samples/Meta XR Core SDK/85.0.0/Sample Scenes/SimultaneousHandsAndControllers.unity
     guid: 52478c233ce9df34087cc379c060a2d3
+  - enabled: 1
+    path: Assets/Scenes/RankingVRSample.unity
+    guid: f2624fdf50ccf428fa651aed4942f102
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: b2b2a35e91c0941db9d67385b5be00b0, type: 2}
