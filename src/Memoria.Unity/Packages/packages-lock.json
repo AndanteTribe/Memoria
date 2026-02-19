@@ -315,6 +315,22 @@
       "source": "local",
       "dependencies": {}
     },
+    "jp.andantetribe.memoria.unity": {
+      "version": "file:jp.andantetribe.memoria.unity",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.ugui": "2.0.0"
+      }
+    },
+    "jp.andantetribe.memoriasample.unity": {
+      "version": "file:jp.andantetribe.memoria.unity/.Samples",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "com.unity.ugui": "2.0.0"
+      }
+    },
     "nuget-packages": {
       "version": "file:nuget-packages",
       "depth": 0,

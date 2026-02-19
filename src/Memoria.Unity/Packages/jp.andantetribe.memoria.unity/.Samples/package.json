@@ -1,0 +1,15 @@
+{
+  "name": "jp.andantetribe.memoriasample.unity",
+  "displayName": "MemoriaSample.Unity",
+  "author": {
+    "name": "AndanteTribe",
+    "url": "https://github.com/AndanteTribe"
+  },
+  "version": "0.1.0",
+  "unity": "2023.1",
+  "license": "MIT",
+  "dependencies": {
+    "com.unity.ugui": "2.0.0"
+  },
+  "description": "Client-side .NET implementation for managing PlayFab rankings and scores."
+}
