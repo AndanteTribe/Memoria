@@ -15,6 +15,7 @@
     "com.unity.xr.interaction.toolkit": "3.3.1",
     "com.unity.xr.meta-openxr": "2.4.0",
     "jp.andantetribe.memoria": "file:../../../bin/Memoria",
+    "jp.andantetribe.memoriasample.unity": "file:jp.andantetribe.memoria.unity/.Samples",
     "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.adaptiveperformance": "1.0.0",
     "com.unity.modules.ai": "1.0.0",

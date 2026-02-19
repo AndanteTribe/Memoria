@@ -1,0 +1,27 @@
+{
+  "name": "jp.andantetribe.memoria.unity",
+  "displayName": "Memoria.Unity",
+  "author": {
+    "name": "AndanteTribe",
+    "url": "https://github.com/AndanteTribe"
+  },
+  "version": "0.1.0",
+  "unity": "2023.1",
+  "license": "MIT",
+    "samples": [
+        {
+            "displayName": "Memoria Sample",
+            "path": ".Samples/MemoriaSample",
+            "description": "PlayFabのランキングやスコア管理のクライアント側.NET実装のサンプル."
+        },
+        {
+            "displayName": "Memoria VR Sample",
+            "path": ".Samples/MemoriaVRSample",
+            "description": "PlayFabのランキングやスコア管理のクライアント側.NET実装のVRサンプル."
+        }
+    ],
+  "dependencies": {
+    "com.unity.ugui": "2.0.0"
+  },
+  "description": "Client-side .NET implementation for managing PlayFab rankings and scores."
+}
