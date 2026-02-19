@@ -11,7 +11,7 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
 
         <!-- NuGet Packaging -->
-        <PackageId>Memoria</PackageId>
+        <PackageId>AndanteTribe.Memoria</PackageId>
         <PackageVersion>$(Version)</PackageVersion>
         <Authors>AndanteTribe</Authors>
         <Copyright>© AndanteTribe</Copyright>
