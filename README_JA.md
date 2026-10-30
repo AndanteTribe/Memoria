@@ -38,6 +38,14 @@ Unity のパッケージマネージャーで、以下の Git URL を追加し�
 https://github.com/AndanteTribe/Memoria.git?path=bin/Memoria
 ```
 
+### Unity サンプルパッケージ（`jp.andantetribe.memoria.unity`）
+
+このリポジトリには、`RankingClient` を使った UGUI ベースのサンプル実装（`Memoria Sample` / `Memoria VR Sample`）を含む `jp.andantetribe.memoria.unity` もあります。
+
+```
+https://github.com/AndanteTribe/Memoria.git?path=src/Memoria.Unity/Packages/jp.andantetribe.memoria.unity
+```
+
 ## クイックスタート
 
 `RankingClient` クラスを使用して、PlayFab のランキングシステムにアクセスできます。
