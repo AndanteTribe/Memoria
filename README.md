@@ -1,8 +1,8 @@
 # Memoria
 
 [![NuGet](https://img.shields.io/nuget/v/AndanteTribe.Memoria.svg)](https://www.nuget.org/packages/AndanteTribe.Memoria)
-[![OpenUPM](https://img.shields.io/npm/v/jp.andantetribe.memoria?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/jp.andantetribe.memoria/)
-[![OpenUPM](https://img.shields.io/npm/v/jp.andantetribe.memoria.unity?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/jp.andantetribe.memoria.unity/)
+[![OpenUPM](https://img.shields.io/npm/v/jp.andantetribe.memoria?label=OpenUPM&registry_uri=https://package.openupm.com)](https://openupm.com/packages/jp.andantetribe.memoria/)
+[![OpenUPM](https://img.shields.io/npm/v/jp.andantetribe.memoria.unity?label=OpenUPM%20(Sample)&registry_uri=https://package.openupm.com)](https://openupm.com/packages/jp.andantetribe.memoria.unity/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 [日本語版はこちら](README_JA.md)
@@ -43,7 +43,8 @@ Add one of the following Git URLs in the Unity Package Manager, depending on you
   ```
 
 - Unity sample package (`jp.andantetribe.memoria.unity`)
-  - Includes UGUI-based sample implementations using `RankingClient` (`Memoria Sample` / `Memoria VR Sample`, with VR support)
+  - Includes a UGUI-based sample implementation using `RankingClient` (`Memoria Sample`)
+  - Includes a VR-compatible sample implementation using `RankingClient` (`Memoria VR Sample`)
   ```
   https://github.com/AndanteTribe/Memoria.git?path=src/Memoria.Unity/Packages/jp.andantetribe.memoria.unity
   ```

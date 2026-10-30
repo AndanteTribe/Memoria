@@ -1,8 +1,8 @@
 # Memoria
 
 [![NuGet](https://img.shields.io/nuget/v/AndanteTribe.Memoria.svg)](https://www.nuget.org/packages/AndanteTribe.Memoria)
-[![OpenUPM](https://img.shields.io/npm/v/jp.andantetribe.memoria?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/jp.andantetribe.memoria/)
-[![OpenUPM](https://img.shields.io/npm/v/jp.andantetribe.memoria.unity?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/jp.andantetribe.memoria.unity/)
+[![OpenUPM](https://img.shields.io/npm/v/jp.andantetribe.memoria?label=OpenUPM&registry_uri=https://package.openupm.com)](https://openupm.com/packages/jp.andantetribe.memoria/)
+[![OpenUPM](https://img.shields.io/npm/v/jp.andantetribe.memoria.unity?label=OpenUPM%20(Sample)&registry_uri=https://package.openupm.com)](https://openupm.com/packages/jp.andantetribe.memoria.unity/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 [English version here](README.md)
@@ -43,7 +43,8 @@ dotnet add package AndanteTribe.Memoria
   ```
 
 - Unity サンプルパッケージ（`jp.andantetribe.memoria.unity`）
-  - `RankingClient` を使った UGUI ベースのサンプル実装（`Memoria Sample` / `Memoria VR Sample`、VR 対応を含む）を含みます
+  - `RankingClient` を使った UGUI ベースのサンプル実装（`Memoria Sample`）を含みます
+  - `RankingClient` を使った VR 対応サンプル実装（`Memoria VR Sample`）を含みます
   ```
   https://github.com/AndanteTribe/Memoria.git?path=src/Memoria.Unity/Packages/jp.andantetribe.memoria.unity
   ```
