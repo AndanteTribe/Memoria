@@ -6,7 +6,7 @@
     <members>
         <member name="T:Memoria.DisplayNameNormalizer">
             <summary>
-            layFabの表示名の制約に合わせて名前を整形する.
+            PlayFabの表示名の制約に合わせて名前を整形する.
             </summary>
         </member>
         <member name="F:Memoria.DisplayNameNormalizer.MinLength">

@@ -1,3 +1,4 @@
+using System;
 namespace Memoria;
 
 /// <summary>
@@ -39,17 +40,31 @@ public static class DisplayNameNormalizer
     /// <returns></returns>
     public static string Normalize(string name, Random? random = null)
     {
-        random ??= DefaultRandom;
-        name = name.Trim();
+        var nameSpan = name.AsSpan().Trim();
 
-        if (name.Length < MinLength)
+        if (nameSpan.Length is >= MinLength and <= MaxLength && name.Length == nameSpan.Length)
         {
-            var suffix = random
-                .Next(0, (int)Math.Pow(10, SuffixDigits))
-                .ToString("D" + SuffixDigits);
-            name += suffix;
+            return name;
         }
 
-        return name.Length > MaxLength ? name[..MaxLength] : name;
+        if (nameSpan.Length < MinLength)
+        {
+            random ??= DefaultRandom;
+            var result = (Span<char>)stackalloc char[nameSpan.Length + SuffixDigits];
+            nameSpan.CopyTo(result);
+
+            var format = (Span<char>)stackalloc char[11];
+            format[0] = 'D';
+            SuffixDigits.TryFormat(format[1..], out var formatLength);
+
+            random.Next(0, (int)Math.Pow(10, SuffixDigits))
+                .TryFormat(result[nameSpan.Length..], out var charsWritten , format[..(formatLength + 1)]);
+
+            return result[..(nameSpan.Length + charsWritten)].ToString();
+        }
+
+        return nameSpan.Length > MaxLength
+            ? nameSpan[..MaxLength].ToString()
+            : nameSpan.ToString();
     }
 }
