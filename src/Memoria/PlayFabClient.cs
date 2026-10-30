@@ -178,7 +178,7 @@ public class PlayFabClient : IAuthentication, IAccountManagement, IPlayerDataMan
         var url = "https://" + titleId + ".playfabapi.com" + endpointPath;
         var jsonBytes = JsonSerializer.SerializeToUtf8Bytes(requestBody);
 
-        for(var attempt = 0; attempt < MaxRetries; attempt++)
+        for (var attempt = 0; attempt < MaxRetries; attempt++)
         {
             try
             {

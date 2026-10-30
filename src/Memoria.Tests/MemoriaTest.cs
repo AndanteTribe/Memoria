@@ -1,4 +1,4 @@
-﻿namespace Memoria.Tests;
+namespace Memoria.Tests;
 
 public class MemoriaTest
 {
