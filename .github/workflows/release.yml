@@ -1,0 +1,87 @@
+name: release (github-hosted ubuntu-latest)
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        type: string
+        required: true
+        default: "0.0.0"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      # ghasec-ignore: unpinned-action
+      - uses: AndanteTribe/Actions/actions/checkout@main # zizmor: ignore[unpinned-uses] repository-local action reference is intentionally tracked on @main
+        with:
+          fetch-depth: 0
+      - name: create branch
+        run: |
+          BRANCH="feature/v${{ github.event.inputs.version }}"
+          echo "Creating branch: $BRANCH"
+
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git fetch origin
+          git checkout -b "$BRANCH" origin/main
+      - name: update versions
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          echo "Updating versions to $VERSION"
+
+          sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" src/Memoria/Memoria.csproj
+
+          jq --arg ver "$VERSION" '.version = $ver' bin/Memoria/package.json > /tmp/package.$$.json && mv /tmp/package.$$.json bin/Memoria/package.json
+          jq --arg ver "$VERSION" '.version = $ver' src/Memoria.Unity/Packages/jp.andantetribe.memoria.unity/package.json > /tmp/unity-package.$$.json && mv /tmp/unity-package.$$.json src/Memoria.Unity/Packages/jp.andantetribe.memoria.unity/package.json
+      # ghasec-ignore: unpinned-action
+      - uses: AndanteTribe/Actions/actions/setup-dotnet@main # zizmor: ignore[unpinned-uses] repository-local action reference is intentionally tracked on @main
+        with:
+          dotnet-version: 9.0.x
+      - name: restore and build
+        run: |
+          dotnet restore ./src/Memoria
+          dotnet build ./src/Memoria --configuration Release --no-restore
+      - name: update generated binaries
+        run: |
+          cp src/Memoria/bin/Release/netstandard2.1/Memoria.dll bin/Memoria/Memoria.dll
+          cp src/Memoria/bin/Release/netstandard2.1/Memoria.xml bin/Memoria/Memoria.xml
+      - name: commit and push
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          BRANCH="feature/v${VERSION}"
+          AUTH_REMOTE="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+
+          git add \
+            src/Memoria/Memoria.csproj \
+            bin/Memoria/package.json \
+            src/Memoria.Unity/Packages/jp.andantetribe.memoria.unity/package.json \
+            bin/Memoria/Memoria.dll \
+            bin/Memoria/Memoria.xml
+
+          git commit -m "chore: bump version to ${VERSION}" || echo "No changes to commit"
+          git push "$AUTH_REMOTE" "HEAD:${BRANCH}"
+      - name: create pull request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          BRANCH="feature/v$VERSION"
+
+          gh pr create \
+            --base main \
+            --head "$BRANCH" \
+            --title "chore: bump version to $VERSION" \
+            --fill \
+            --assignee "${{ github.actor }}"
