@@ -1,7 +1,7 @@
 namespace Memoria;
 
 /// <summary>
-/// layFabの表示名の制約に合わせて名前を整形する.
+/// PlayFabの表示名の制約に合わせて名前を整形する.
 /// </summary>
 public static class DisplayNameNormalizer
 {
@@ -46,7 +46,7 @@ public static class DisplayNameNormalizer
         {
             var suffix = random
                 .Next(0, (int)Math.Pow(10, SuffixDigits))
-                .ToString();
+                .ToString("D" + SuffixDigits);
             name += suffix;
         }
 
