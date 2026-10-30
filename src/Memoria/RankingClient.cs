@@ -50,7 +50,8 @@ public class RankingClient
         string statisticsName = "HighScore",
         CancellationToken cancellationToken = default)
     {
-        var nameRequest = new UpdateUserTitleDisplayNameRequest(playerName);
+        var normalizedName = DisplayNameNormalizer.Normalize(playerName);
+        var nameRequest = new UpdateUserTitleDisplayNameRequest(normalizedName);
         await _client.AccountManagement.UpdateUserTitleDisplayNameAsync(nameRequest, _userOption!, cancellationToken);
         var statistics = new[]
         {
