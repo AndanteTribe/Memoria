@@ -1,5 +1,7 @@
 # Memoria
 
+[![NuGet](https://img.shields.io/nuget/v/Memoria.svg)](https://www.nuget.org/packages/Memoria)
+[![OpenUPM](https://img.shields.io/npm/v/jp.andantetribe.memoria.unity?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/jp.andantetribe.memoria.unity/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 [English version here](README.md)
@@ -32,19 +34,19 @@ dotnet add package Memoria
 
 ### Unity Package Manager（Unity 向け）
 
-Unity のパッケージマネージャーで、以下の Git URL を追加してください。
+用途に応じて、Unity のパッケージマネージャーに以下の Git URL を追加してください。
 
-```
-https://github.com/AndanteTribe/Memoria.git?path=bin/Memoria
-```
+- コアパッケージ（`jp.andantetribe.memoria`）
+  ```
+  https://github.com/AndanteTribe/Memoria.git?path=bin/Memoria
+  ```
 
-### Unity サンプルパッケージ（`jp.andantetribe.memoria.unity`）
-
-このリポジトリには、`RankingClient` を使った UGUI ベースのサンプル実装（`Memoria Sample` / `Memoria VR Sample`）を含む `jp.andantetribe.memoria.unity` もあります。
-
-```
-https://github.com/AndanteTribe/Memoria.git?path=src/Memoria.Unity/Packages/jp.andantetribe.memoria.unity
-```
+- Unity サンプルパッケージ（`jp.andantetribe.memoria.unity`）
+  - `RankingClient` を使った UGUI ベースのサンプル実装（`Memoria Sample` / `Memoria VR Sample`）を含みます
+  - VR 対応サンプル実装（`Memoria VR Sample`）を含みます
+  ```
+  https://github.com/AndanteTribe/Memoria.git?path=src/Memoria.Unity/Packages/jp.andantetribe.memoria.unity
+  ```
 
 ## クイックスタート
 
