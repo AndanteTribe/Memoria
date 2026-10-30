@@ -58,7 +58,7 @@ public static class DisplayNameNormalizer
             SuffixDigits.TryFormat(format[1..], out var formatLength);
 
             random.Next(0, (int)Math.Pow(10, SuffixDigits))
-                .TryFormat(result[nameSpan.Length..], out var charsWritten , format[..(formatLength + 1)]);
+                .TryFormat(result[nameSpan.Length..], out var charsWritten, format[..(formatLength + 1)]);
 
             return result[..(nameSpan.Length + charsWritten)].ToString();
         }
