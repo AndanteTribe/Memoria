@@ -1,6 +1,7 @@
 # Memoria
 
 [![NuGet](https://img.shields.io/nuget/v/Memoria.svg)](https://www.nuget.org/packages/Memoria)
+[![OpenUPM](https://img.shields.io/npm/v/jp.andantetribe.memoria?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/jp.andantetribe.memoria/)
 [![OpenUPM](https://img.shields.io/npm/v/jp.andantetribe.memoria.unity?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/jp.andantetribe.memoria.unity/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
