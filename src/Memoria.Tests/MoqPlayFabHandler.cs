@@ -24,9 +24,23 @@ public class MoqPlayFabHandler : DelegatingHandler
     public HttpRequestMessage? LastRequest { get; private set; }
 
     /// <summary>
+    /// 送信されたリクエストの履歴をここに保存する
+    /// </summary>
+    public List<(HttpRequestMessage Request, string? Body)> Requests { get; } = new();
+
+    /// <summary>
     /// 最後に送信されたリクエストボディをここに保存する
     /// </summary>
     public string? LastRequestBody { get; private set; }
+
+    /// <summary>
+    /// 指定されたAPI名に一致するリクエストのボディを取得する
+    /// </summary>
+    /// <param name="apiName"></param>
+    /// <returns></returns>
+    public string? GetRequestBody(string apiName) =>
+        Requests.LastOrDefault(r =>
+            r.Request.RequestUri?.AbsolutePath.EndsWith(apiName) == true).Body;
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
@@ -36,9 +50,8 @@ public class MoqPlayFabHandler : DelegatingHandler
         {
             LastRequestBody = await request.Content.ReadAsStringAsync(cancellationToken);
         }
-
+        Requests.Add((request, LastRequestBody));
         var responseMessage = new HttpResponseMessage(ResponseStatusCode);
-
         if (ResponseData != null)
         {
             // オブジェクトをJSON文字列に変換
@@ -50,7 +63,6 @@ public class MoqPlayFabHandler : DelegatingHandler
             // 空の場合は空のJSONオブジェクトを返す
             responseMessage.Content = new StringContent("{}");
         }
-
         return responseMessage;
     }
 }

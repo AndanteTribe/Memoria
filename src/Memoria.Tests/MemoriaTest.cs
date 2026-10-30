@@ -339,4 +339,55 @@ public class MemoriaTest
         Assert.That(rankings[1].playerName, Is.EqualTo("PlayerTwo"));
         Assert.That(rankings[1].score, Is.EqualTo(2000));
     }
+
+    [TestCase("AB")]
+    [TestCase("A")]
+    [TestCase("")]
+    public void ShortNameIsPadded(string name)
+    {
+        var result = DisplayNameNormalizer.Normalize(name, new Random(0));
+
+        Assert.That(result, Does.StartWith(name));
+        Assert.That(result.Length, Is.InRange(
+            DisplayNameNormalizer.MinLength,
+            DisplayNameNormalizer.MaxLength));
+    }
+
+    [Test]
+    public void NameOfMinLengthIsUnchanged()
+    {
+        Assert.That(DisplayNameNormalizer.Normalize("ABC"), Is.EqualTo("ABC"));
+    }
+
+    [Test]
+    public void LongNameIsTruncated()
+    {
+        var name = new string('A', 30);
+        var result = DisplayNameNormalizer.Normalize(name);
+
+        Assert.That(result.Length, Is.EqualTo(DisplayNameNormalizer.MaxLength));
+    }
+
+    [Test]
+    public async Task SendMinimumLengthPlayerNameTest()
+    {
+        const string playerName = "AB";
+        const int scoreValue = 1500;
+        var handler = new MoqPlayFabHandler();
+        var client = new PlayFabClient(handler);
+        handler.ResponseData = new LoginWithCustomIdResponse()
+        {
+            Result = new LoginResult
+            {
+                SessionTicket = SessionTicket,
+                NewlyCreated = true,
+            },
+        };
+        var rankingClient = new RankingClient(TitleId, client);
+        await rankingClient.LoginAsync();
+        await rankingClient.SendAsync(playerName, scoreValue);
+        var body = handler.GetRequestBody("UpdateUserTitleDisplayName");
+        Assert.That(body, Does.Contain(playerName));
+        Assert.That(handler.LastRequestBody, Contains.Substring(scoreValue.ToString()));
+    }
 }

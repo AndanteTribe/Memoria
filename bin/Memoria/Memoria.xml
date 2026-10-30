@@ -4,6 +4,34 @@
         <name>Memoria</name>
     </assembly>
     <members>
+        <member name="T:Memoria.DisplayNameNormalizer">
+            <summary>
+            layFabの表示名の制約に合わせて名前を整形する.
+            </summary>
+        </member>
+        <member name="F:Memoria.DisplayNameNormalizer.MinLength">
+            <summary>
+            表示名の最小文字数
+            </summary>
+        </member>
+        <member name="F:Memoria.DisplayNameNormalizer.MaxLength">
+            <summary>
+            表示名の最大文字数
+            </summary>
+        </member>
+        <member name="F:Memoria.DisplayNameNormalizer.SuffixDigits">
+            <summary>
+            ランダム数字の桁数
+            </summary>
+        </member>
+        <member name="M:Memoria.DisplayNameNormalizer.Normalize(System.String,System.Random)">
+            <summary>
+            名前が3文字未満の場合はランダムな数字を付与し、25文字を超える場合は切り捨てる.
+            </summary>
+            <param name="name"></param>
+            <param name="random"></param>
+            <returns></returns>
+        </member>
         <member name="T:Memoria.GetLeaderboardRequest">
             <summary>
             リーダーボード取得リクエスト.
