@@ -15,5 +15,5 @@ jobs:
       - uses: AndanteTribe/Actions/actions/dispatch-nuget-publish@main # zizmor: ignore[unpinned-uses] repository-local action reference is intentionally tracked on @main
         with:
           token: ${{ secrets.NUGET_PUBLISH_PAT }}
-          project: src/Backport/Backport.csproj
+          project: src/Memoria/Memoria.csproj
           dotnet-version: '9.0.x'
