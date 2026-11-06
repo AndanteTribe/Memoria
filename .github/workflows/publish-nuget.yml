@@ -1,8 +1,7 @@
 name: Publish to Nuget
 on:
   workflow_dispatch: {}
-permissions:
-  contents: read
+permissions: {}
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -10,28 +9,11 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       # ghasec-ignore: unpinned-action
-      - uses: AndanteTribe/Actions/actions/checkout@main # zizmor: ignore[unpinned-uses] repository-local action reference is intentionally tracked on @main
-      # ghasec-ignore: unpinned-action
-      - uses: AndanteTribe/Actions/actions/setup-dotnet@main # zizmor: ignore[unpinned-uses] repository-local action reference is intentionally tracked on @main
+      - uses: AndanteTribe/Actions/actions/dispatch-nuget-publish@main # zizmor: ignore[unpinned-uses] repository-local action reference is intentionally tracked on @main
         with:
-          dotnet-version: 9.0.x
-      - name: Restore
-        run: dotnet restore
-        working-directory: ./src/Memoria
-      - name: Build
-        run: dotnet build -c Release --no-restore
-        working-directory: ./src/Memoria
-      - name: Pack
-        run: dotnet pack -c Release -o artifacts/
-        working-directory: ./src/Memoria
-      - name: Publish to Nuget
-        run: find . -type f -name "*.nupkg" -print0 | xargs -0 -I pkg dotnet nuget push pkg -k $nuget_api_key -s "https://api.nuget.org/v3/index.json" --skip-duplicate
-        env:
-          nuget_api_key: ${{ secrets.NUGET_API_KEY }}
-        working-directory: ./src/Memoria/artifacts
-#      - uses: actions/upload-artifact@master
-#        with:
-#          path: ./src/Memoria/artifacts
-#          retention-days: 2
+          token: ${{ secrets.NUGET_PUBLISH_PAT }}
+          project: src/Memoria/Memoria.csproj
+          dotnet-version: '9.0.x'
