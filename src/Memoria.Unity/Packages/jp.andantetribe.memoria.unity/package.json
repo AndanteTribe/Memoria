@@ -5,21 +5,21 @@
     "name": "AndanteTribe",
     "url": "https://github.com/AndanteTribe"
   },
-  "version": "1.1.0",
+  "version": "1.1.1",
   "unity": "2023.1",
   "license": "MIT",
-    "samples": [
-        {
-            "displayName": "Memoria Sample",
-            "path": ".Samples/MemoriaSample",
-            "description": "PlayFabのランキングやスコア管理のクライアント側.NET実装のサンプル."
-        },
-        {
-            "displayName": "Memoria VR Sample",
-            "path": ".Samples/MemoriaVRSample",
-            "description": "PlayFabのランキングやスコア管理のクライアント側.NET実装のVRサンプル."
-        }
-    ],
+  "samples": [
+    {
+      "displayName": "Memoria Sample",
+      "path": ".Samples/MemoriaSample",
+      "description": "PlayFabのランキングやスコア管理のクライアント側.NET実装のサンプル."
+    },
+    {
+      "displayName": "Memoria VR Sample",
+      "path": ".Samples/MemoriaVRSample",
+      "description": "PlayFabのランキングやスコア管理のクライアント側.NET実装のVRサンプル."
+    }
+  ],
   "dependencies": {
     "com.unity.ugui": "2.0.0"
   },
