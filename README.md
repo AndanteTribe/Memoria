@@ -1,5 +1,8 @@
 # Memoria
 
+[![NuGet](https://img.shields.io/nuget/v/AndanteTribe.Memoria.svg)](https://www.nuget.org/packages/AndanteTribe.Memoria)
+[![OpenUPM](https://img.shields.io/npm/v/jp.andantetribe.memoria?label=OpenUPM&registry_uri=https://package.openupm.com)](https://openupm.com/packages/jp.andantetribe.memoria/)
+[![OpenUPM](https://img.shields.io/npm/v/jp.andantetribe.memoria.unity?label=OpenUPM%20(Sample)&registry_uri=https://package.openupm.com)](https://openupm.com/packages/jp.andantetribe.memoria.unity/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 [日本語版はこちら](README_JA.md)
@@ -27,16 +30,24 @@ It is designed to allow game developers to easily integrate PlayFab's leaderboar
 ### NuGet (for .NET projects)
 
 ```bash
-dotnet add package Memoria
+dotnet add package AndanteTribe.Memoria
 ```
 
 ### Unity Package Manager (for Unity)
 
-Add the following Git URL in the Unity Package Manager:
+Add one of the following Git URLs in the Unity Package Manager, depending on your use case:
 
-```
-https://github.com/AndanteTribe/Memoria.git?path=bin/Memoria
-```
+- Core package (`jp.andantetribe.memoria`)
+  ```
+  https://github.com/AndanteTribe/Memoria.git?path=bin/Memoria
+  ```
+
+- Unity sample package (`jp.andantetribe.memoria.unity`)
+  - Includes a UGUI-based sample implementation using `RankingClient` (`Memoria Sample`)
+  - Includes a VR-compatible sample implementation using `RankingClient` (`Memoria VR Sample`)
+  ```
+  https://github.com/AndanteTribe/Memoria.git?path=src/Memoria.Unity/Packages/jp.andantetribe.memoria.unity
+  ```
 
 ## Quick Start
 
