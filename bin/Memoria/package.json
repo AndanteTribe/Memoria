@@ -1,11 +1,11 @@
 {
-    "name": "jp.andantetribe.memoria",
-    "displayName": "Memoria",
-    "author": {
-        "name": "AndanteTribe",
-        "url": "https://github.com/AndanteTribe"
-    },
-    "version": "1.1.0",
-    "unity": "2022.3",
-    "license": "MIT"
+  "name": "jp.andantetribe.memoria",
+  "displayName": "Memoria",
+  "author": {
+    "name": "AndanteTribe",
+    "url": "https://github.com/AndanteTribe"
+  },
+  "version": "1.1.1",
+  "unity": "2022.3",
+  "license": "MIT"
 }
