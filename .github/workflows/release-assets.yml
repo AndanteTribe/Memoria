@@ -1,0 +1,111 @@
+name: Upload Unity release assets
+on:
+  release:
+    types: [published]
+
+permissions: {}
+
+env:
+  RELEASE_TAG: ${{ github.event.release.tag_name }}
+
+concurrency:
+  group: release-assets-${{ github.event.release.tag_name }}
+  cancel-in-progress: false
+
+jobs:
+  unitypackage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Memoria
+            package: jp.andantetribe.memoria
+            package-path: bin/Memoria
+          - name: Memoria.Unity
+            package: jp.andantetribe.memoria.unity
+            package-path: src/Memoria.Unity/Packages/jp.andantetribe.memoria.unity
+    steps:
+      - name: Checkout release tag
+        # ghasec-ignore: unpinned-action
+        uses: AndanteTribe/Actions/actions/checkout@main # zizmor: ignore[unpinned-uses] organization-managed action reference is intentionally tracked on @main
+        with:
+          ref: refs/tags/${{ env.RELEASE_TAG }}
+
+      - name: Stage package under Unity project path
+        shell: bash
+        env:
+          PACKAGE_PATH: ${{ matrix.package-path }}
+          PACKAGE_NAME: ${{ matrix.package }}
+        run: |
+          mkdir -p staging/Packages
+          cp -a "$PACKAGE_PATH" "staging/Packages/$PACKAGE_NAME"
+
+      - name: Build unitypackage
+        # ghasec-ignore: unpinned-action
+        uses: AndanteTribe/Actions/actions/build-unitypackage@main # zizmor: ignore[unpinned-uses] organization-managed action reference is intentionally tracked on @main
+        with:
+          package-path: staging/Packages/${{ matrix.package }}
+          root-path: staging
+          output-path: dist/${{ matrix.name }}.${{ env.RELEASE_TAG }}.unitypackage
+
+      - name: Upload unitypackage
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          ASSET_NAME: ${{ matrix.name }}
+        run: gh release upload "$RELEASE_TAG" "dist/${ASSET_NAME}.${RELEASE_TAG}.unitypackage"
+
+  signed-upm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        package-path:
+          - bin/Memoria
+          - src/Memoria.Unity/Packages/jp.andantetribe.memoria.unity
+    steps:
+      - name: Checkout release tag
+        # ghasec-ignore: unpinned-action
+        uses: AndanteTribe/Actions/actions/checkout@main # zizmor: ignore[unpinned-uses] organization-managed action reference is intentionally tracked on @main
+        with:
+          ref: refs/tags/${{ env.RELEASE_TAG }}
+
+      - name: Sign and upload UPM package
+        # ghasec-ignore: unpinned-action
+        uses: AndanteTribe/Actions/actions/sign-upm-release@main # zizmor: ignore[unpinned-uses] organization-managed action reference is intentionally tracked on @main
+        with:
+          package-path: ${{ matrix.package-path }}
+          tag: ${{ env.RELEASE_TAG }}
+          organization-id: ${{ secrets.UPM_ORG_ID }}
+          service-account-key-id: ${{ secrets.UPM_SERVICE_ACCOUNT_KEY_ID }}
+          service-account-key-secret: ${{ secrets.UPM_SERVICE_ACCOUNT_KEY_SECRET }}
+
+  openupm:
+    needs: [unitypackage, signed-upm]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      id-token: write
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - jp.andantetribe.memoria
+          - jp.andantetribe.memoria.unity
+    steps:
+      - name: Refresh OpenUPM and wait for publication
+        # ghasec-ignore: unpinned-action
+        uses: AndanteTribe/Actions/actions/openupm-action@main # zizmor: ignore[unpinned-uses] organization-managed action reference is intentionally tracked on @main
+        with:
+          package: ${{ matrix.package }}
+          tag: ${{ env.RELEASE_TAG }}
+          timeout-minutes: '15'
+          poll-interval-seconds: '15'
